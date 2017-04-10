@@ -1,6 +1,11 @@
 package ie.gmit.sw.ai;
 
 
+/*
+Make a Singleton, so the maze array can be updated from Sprite.
+Make maze array AtomicReferenceArray<Character> so it is concurrent.
+ */
+
 public class Maze {
 	private char[][] maze;
 	public Maze(int dimension){

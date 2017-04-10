@@ -9,6 +9,20 @@ public class Sprite {
  	private int index = 0; //Initial starting index in array
 
 	//private double lifeForce = 500;
+
+	/*
+
+	Sprite will contain the movement code.
+	Added vars to keep track of row and col in Maze.
+	Change maze to AtomicReferenceArray (it's concurrent)
+	Make Maze.java Singleton? so the reference can be obtained
+    Thread movement stuff.
+
+    To move, search maze array to decide where to move.
+    Once a spot is picked, take self out of Maze array and place self into new spot.
+    Sprite can't move while attacking or when attacked.
+
+	 */
  	
 	public Sprite(String name, String... images) throws Exception{
 		this.name = name;
