@@ -21,9 +21,10 @@ public class Node {
 	private int col = -1;
 	private int distance;
 	
-	public Node(int row, int col) {
+	public Node(int row, int col, int id) {
 		this.row = row;
 		this.col = col;
+		this.id = id;
 	}
 
     public int getId() {
