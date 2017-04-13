@@ -10,7 +10,7 @@ public class Maze {
 
 	private Object lock = new Object();	// used for locking when threads try to update the maze
 	private char[][] maze;
-	    
+
 	public Maze(int dimension){
 
 		maze = new char[dimension][dimension];
