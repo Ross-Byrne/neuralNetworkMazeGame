@@ -7,8 +7,12 @@ Make maze array AtomicReferenceArray<Character> so it is concurrent.
  */
 
 public class Maze {
+
+	private Object lock = new Object();	// used for locking when threads try to update the maze
 	private char[][] maze;
+	    
 	public Maze(int dimension){
+
 		maze = new char[dimension][dimension];
 		init();
 		buildMaze();
@@ -20,14 +24,14 @@ public class Maze {
 		addFeature('\u0034', '0', featureNumber); //4 is a hydrogen bomb, 0 is a hedge
 		
 		featureNumber = (int)((dimension * dimension) * 0.01);
-		addFeature('\u0036', '0', featureNumber); //6 is a Black Spider, 0 is a hedge
-		addFeature('\u0037', '0', featureNumber); //7 is a Blue Spider, 0 is a hedge
-		addFeature('\u0038', '0', featureNumber); //8 is a Brown Spider, 0 is a hedge
-		addFeature('\u0039', '0', featureNumber); //9 is a Green Spider, 0 is a hedge
-		addFeature('\u003A', '0', featureNumber); //: is a Grey Spider, 0 is a hedge
-		addFeature('\u003B', '0', featureNumber); //; is a Orange Spider, 0 is a hedge
-		addFeature('\u003C', '0', featureNumber); //< is a Red Spider, 0 is a hedge
-		addFeature('\u003D', '0', featureNumber); //= is a Yellow Spider, 0 is a hedge
+		addFeature('\u0036', '\u0020', featureNumber); //6 is a Black Spider, 0 is a hedge
+		addFeature('\u0037', '\u0020', featureNumber); //7 is a Blue Spider, 0 is a hedge
+		addFeature('\u0038', '\u0020', featureNumber); //8 is a Brown Spider, 0 is a hedge
+		addFeature('\u0039', '\u0020', featureNumber); //9 is a Green Spider, 0 is a hedge
+		addFeature('\u003A', '\u0020', featureNumber); //: is a Grey Spider, 0 is a hedge
+		addFeature('\u003B', '\u0020', featureNumber); //; is a Orange Spider, 0 is a hedge
+		addFeature('\u003C', '\u0020', featureNumber); //< is a Red Spider, 0 is a hedge
+		addFeature('\u003D', '\u0020', featureNumber); //= is a Yellow Spider, 0 is a hedge
 	}
 	
 	private void init(){
