@@ -7,6 +7,10 @@ Make maze array AtomicReferenceArray<Character> so it is concurrent.
  */
 
 import ie.gmit.sw.ai.node.Node;
+import ie.gmit.sw.ai.node.Node.Direction;
+
+import java.util.Deque;
+import java.util.LinkedList;
 
 public class Maze {
 
@@ -18,6 +22,8 @@ public class Maze {
 		maze = new Node[dimension][dimension];
 		init();
 		buildMaze();
+		setPaths();
+		unvisit();
 		
 		int featureNumber = 20;
 		addFeature(1, 0, featureNumber); //1 is a sword, 0 is a hedge
@@ -43,6 +49,59 @@ public class Maze {
 			}
 		}
 	}
+
+    private void setPaths(){
+
+
+        Node node = maze[0][0];
+
+        Deque<Node> stack = new LinkedList<Node>();
+        stack.addFirst(node);
+
+        while (!stack.isEmpty()){
+            node = stack.poll();
+            //node.setVisited(true);
+
+
+            Node[] adjacents = node.adjacentNodes(maze);
+            //super.shuffle(adjacents);
+
+            for (int i = 0; i < adjacents.length; i++) {
+                if (!adjacents[i].isVisited()){
+                    stack.addFirst(adjacents[i]);
+                    Direction dir = getDirection(node, adjacents[i]);
+                    node.addPath(dir);
+                    adjacents[i].addPath(opposite(dir));
+                    adjacents[i].setVisited(true);
+                }
+            }
+        }
+    }
+
+    protected void unvisit(){
+        for (int i = 0; i < maze.length; i++){
+            for (int j = 0; j < maze[i].length; j++){
+                maze[i][j].setVisited(false);
+                maze[i][j].setParent(null);
+            }
+        }
+    }
+
+    protected Direction getDirection(Node current, Node adjacent){
+        if (adjacent.getRow() == current.getRow() - 1 && adjacent.getCol() == current.getCol()) return Direction.North;
+        if (adjacent.getRow() == current.getRow() + 1 && adjacent.getCol() == current.getCol()) return Direction.South;
+        if (adjacent.getRow() == current.getRow() && adjacent.getCol() == current.getCol() - 1) return Direction.West;
+        if (adjacent.getRow() == current.getRow() && adjacent.getCol() == current.getCol() + 1) return Direction.East;
+        return null;
+    }
+
+    protected Direction opposite(Direction dir){
+        if (dir == Direction.North) return Direction.South;
+        if (dir == Direction.South) return Direction.North;
+        if (dir == Direction.East) return Direction.West;
+        if (dir == Direction.West) return Direction.East;
+        return null;
+    }
 	
 	private void addFeature(int feature, int replace, int number){
 		int counter = 0;
@@ -68,7 +127,7 @@ public class Maze {
 					    maze[row + 1][col].setId(-1);
 				}
 			}
-		}		
+		}
 	}
 	
 	public Node[][] getMaze(){
@@ -98,4 +157,5 @@ public class Maze {
 		}
 		return sb.toString();
 	}
+
 }
