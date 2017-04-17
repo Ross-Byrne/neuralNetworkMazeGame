@@ -7,6 +7,7 @@ Make maze array AtomicReferenceArray<Character> so it is concurrent.
  */
 
 import ie.gmit.sw.ai.node.Node;
+import ie.gmit.sw.ai.node.SpiderNode;
 
 public class Maze {
 
@@ -51,6 +52,11 @@ public class Maze {
 			int col = (int) (maze[0].length * Math.random());
 			
 			if (maze[row][col].getId() == replace){
+
+				// if it's a spider, create a spider node
+				if(feature > 5)
+					maze[row][col] = new SpiderNode(row, col, feature, lock, maze);
+
 				maze[row][col].setId(feature);
 				counter++;
 			}
