@@ -32,11 +32,11 @@ public class SpiderNode extends Node {
             while (true) {
                 try {
 
-                    // start moving the spider
-                    move();
-
                     // sleep thread to simulate a movement pace
                     Thread.sleep(movementSpeed);
+
+                    // start moving the spider
+                    move();
 
                 } catch (Exception ex) {
 
@@ -54,7 +54,7 @@ public class SpiderNode extends Node {
 
         synchronized (lock) {
 
-            System.out.println("Moving number: " + moveNum);
+            //System.out.println("Moving number: " + moveNum);
 
             Node[] adjacentNodes = null;
             List<Node> canMoveTo = new ArrayList<>();
@@ -84,8 +84,14 @@ public class SpiderNode extends Node {
                 newX = canMoveTo.get(index).getRow();
                 newY = canMoveTo.get(index).getCol();
 
+                // update X and Y
+                setRow(newX);
+                setCol(newY);
+                canMoveTo.get(index).setRow(oldX);
+                canMoveTo.get(index).setCol(oldY);
+
                 // move to that node
-                maze[newX][newY] = (Node)this;
+                maze[newX][newY] = (SpiderNode)this;
 
                 // remove self from original spot
                 maze[oldX][oldY] = canMoveTo.get(index);
@@ -94,7 +100,7 @@ public class SpiderNode extends Node {
 
         } // synchronized()
 
-        moveNum++;
+        //moveNum++;
     } // move()
 
 
