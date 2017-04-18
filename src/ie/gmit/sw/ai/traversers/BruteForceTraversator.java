@@ -38,7 +38,7 @@ public class BruteForceTraversator implements Traversator{
 				e.printStackTrace();
 			}
 			
-			Node[] children = node.children(maze);
+			Node[] children = node.adjacentNodes(maze);
 
             //System.out.println(node.children(maze).length);
 

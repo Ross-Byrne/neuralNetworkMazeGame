@@ -12,7 +12,6 @@ import java.util.Deque;
 import java.util.LinkedList;
 import ie.gmit.sw.ai.node.SpiderNode;
 
-
 public class Maze {
 
 	private Object lock = new Object();	// used for locking when threads try to update the maze

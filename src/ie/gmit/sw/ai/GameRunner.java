@@ -41,12 +41,15 @@ public class GameRunner implements KeyListener{
         f.setVisible(true);
 
         //setting test goal node
-        model.getMaze()[1][60].setGoalNode(true);
+        model.getMaze()[3][3].setGoalNode(true);
 
-		Traversator t = new BruteForceTraversator(true);
+		//Traversator t = new BruteForceTraversator(true);
+        Traversator t = new DepthLimitedDFSTraversator(10);
+        //Traversator t = new BestFirstTraversator(model.getMaze()[1][69]);
 
         //transverse from node 0 0 //can change 0 0 to sprites location to search from their location
-		t.traverse(model.getMaze(), model.getMaze()[2][2]);
+        t.traverse(model.getMaze(), model.getMaze()[20][20]);
+        
 	}
 
 	// need to update maze.set()

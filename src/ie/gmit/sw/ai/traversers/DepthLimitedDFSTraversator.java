@@ -1,7 +1,6 @@
 package ie.gmit.sw.ai.traversers;
 
 import ie.gmit.sw.ai.node.*;
-
 public class DepthLimitedDFSTraversator implements Traversator{
 	private Node[][] maze;
 	private int limit;
@@ -38,7 +37,7 @@ public class DepthLimitedDFSTraversator implements Traversator{
 			e.printStackTrace();
 		}
 		
-		Node[] children = node.children(maze);
+		Node[] children = node.adjacentNodes(maze);
 		for (int i = 0; i < children.length; i++) {
 			if (children[i] != null && !children[i].isVisited()){
 				children[i].setParent(node);
