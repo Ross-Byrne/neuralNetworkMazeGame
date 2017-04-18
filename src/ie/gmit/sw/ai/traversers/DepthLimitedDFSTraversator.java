@@ -1,6 +1,11 @@
 package ie.gmit.sw.ai.traversers;
 
 import ie.gmit.sw.ai.node.*;
+
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
+
 public class DepthLimitedDFSTraversator implements Traversator{
 	private Node[][] maze;
 	private int limit;
@@ -8,6 +13,9 @@ public class DepthLimitedDFSTraversator implements Traversator{
 	private long time = System.currentTimeMillis();
 	private int visitCount = 0;
     private Node goal;
+    private Node start;
+    private Set<Node> isVisited = null;
+    private LinkedList<Node> pathToGoal = null;
 	
 	public DepthLimitedDFSTraversator(int limit,Node goal){
 		this.limit = limit;
@@ -15,36 +23,56 @@ public class DepthLimitedDFSTraversator implements Traversator{
 	}
 	
 	public void traverse(Node[][] maze, Node node) {
-		this.maze = maze;
-        // System.out.println("Search with limit " + limit);
-		dfs(node, 1);
-	}
-	
-	private void dfs(Node node, int depth){
-		if (!keepRunning || depth > limit) return;
 
-        node.setVisited(true);
+	    pathToGoal = new LinkedList<>();
+		this.maze = maze;
+
+		start = node;
+
+		// create new hashset to keep track of visited nodes
+		isVisited = new HashSet<>();
+
+        // System.out.println("Search with limit " + limit);
+		if(dfs(node, 1) == true){
+
+		    pathToGoal.addFirst(node);
+        }
+
+		//System.out.println("Finished Search: " + isVisited.size() + " Visit count: " + visitCount);
+
+		// clear visited nodes
+		isVisited = null;
+
+        System.out.println("Path size: " + pathToGoal.size());
+    }
+	
+	private boolean dfs(Node node, int depth){
+		if (!keepRunning || depth > limit) return false;
+
+        //node.setVisited(true);
+		isVisited.add(node);
+
 		visitCount++;
 		
 		if (node.equals(goal)){
-	        time = System.currentTimeMillis() - time; //Stop the clock
+		    pathToGoal.addFirst(node);
+            System.out.println("Goal Found by: " + start.hashCode());
+            time = System.currentTimeMillis() - time; //Stop the clock
 	        TraversatorStats.printStats(node, time, visitCount);
 	        keepRunning = false;
-			return;
+			return true;
 		}
-		
-//		try { //Simulate processing each expanded node
-//			Thread.sleep(50);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
 		
 		Node[] children = node.adjacentNodes(maze);
 		for (int i = 0; i < children.length; i++) {
-			if (children[i] != null && !children[i].isVisited()){
+			if (children[i] != null && !isVisited.contains(children[i])){
 				children[i].setParent(node);
-				dfs(children[i], depth + 1);
+				if(dfs(children[i], depth + 1) == true) {
+                    pathToGoal.addFirst(node);
+                    return true;
+                } // if
 			}
 		}
+        return false;
 	}
 }

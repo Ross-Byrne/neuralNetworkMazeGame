@@ -43,7 +43,7 @@ public class SpiderNode extends Node {
                     Thread.sleep(movementSpeed);
 
                     //search
-                    search(row,col);
+                    search(getRow(), getCol());
 
                     // start moving the spider
                     move();
