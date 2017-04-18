@@ -47,7 +47,8 @@ public class DepthLimitedDFSTraversator implements Traversator{
 		// clear visited nodes
 		isVisited = null;
 
-        System.out.println("Path size: " + pathToGoal.size());
+		if(pathToGoal.size() > 0)
+            System.out.println("Path size: " + pathToGoal.size());
     }
 	
 	private boolean dfs(Node node, int depth){
