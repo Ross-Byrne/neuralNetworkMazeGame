@@ -1,8 +1,5 @@
 package ie.gmit.sw.ai;
 
-import ie.gmit.sw.ai.traversers.*;
-import ie.gmit.sw.ai.node.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -22,11 +19,8 @@ public class GameRunner implements KeyListener{
     	currentRow=model.getPlayer().getRow();
         currentCol=model.getPlayer().getCol();
 
-    	
     	Sprite[] sprites = getSprites();
     	view.setSprites(sprites);
-    	
-    	//placePlayer();
     	
     	Dimension d = new Dimension(GameView.DEFAULT_VIEW_SIZE, GameView.DEFAULT_VIEW_SIZE);
     	view.setPreferredSize(d);
@@ -42,29 +36,8 @@ public class GameRunner implements KeyListener{
         f.setLocation(100,100);
         f.pack();
         f.setVisible(true);
-
-        //setting test goal node
-        //model.getMaze()[3][3].setGoalNode(true);
-
-		//Traversator t = new BruteForceTraversator(true);
-        //Traversator t = new BestFirstTraversator(model.getMaze()[1][69]);
-
-        //Traversator t = new DepthLimitedDFSTraversator(10);
-
-        //transverse from node 0 0 //can change 0 0 to sprites location to search from their location
-        //t.traverse(model.getMaze(), model.getMaze()[20][20]);
-        
 	}
 
-	// need to update maze.set()
-	private void placePlayer(){   	
-    	//currentRow = (int) (MAZE_DIMENSION * Math.random());
-    	//currentCol = (int) (MAZE_DIMENSION * Math.random());
-    	//model.set(currentRow, currentCol, new Node(currentRow, currentCol, 5)); //A Spartan warrior is at index 5
-       // model.setPlayer(currentRow, currentCol);
-    	//updateView();
-	}
-	
 	private void updateView(){
 		view.setCurrentRow(currentRow);
 		view.setCurrentCol(currentCol);
