@@ -1,10 +1,12 @@
 package ie.gmit.sw.ai;
 
-import ie.gmit.sw.ai.node.Node;
+import ie.gmit.sw.ai.traversers.*;
+import ie.gmit.sw.ai.node.*;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
 public class GameRunner implements KeyListener{
 	private static final int MAZE_DIMENSION = 100;
 	private static final int IMAGE_COUNT = 14;
@@ -16,11 +18,12 @@ public class GameRunner implements KeyListener{
 	public GameRunner() throws Exception{
 		model = new Maze(MAZE_DIMENSION);
     	view = new GameView(model);
+
     	
     	Sprite[] sprites = getSprites();
     	view.setSprites(sprites);
     	
-    	placePlayer();
+    	//placePlayer();
     	
     	Dimension d = new Dimension(GameView.DEFAULT_VIEW_SIZE, GameView.DEFAULT_VIEW_SIZE);
     	view.setPreferredSize(d);
@@ -36,6 +39,22 @@ public class GameRunner implements KeyListener{
         f.setLocation(100,100);
         f.pack();
         f.setVisible(true);
+
+        //setting test goal node
+        model.getMaze()[3][3].setGoalNode(true);
+
+		//Traversator t = new BruteForceTraversator(true);
+        Traversator t = new DepthLimitedDFSTraversator(10);
+        //Traversator t = new BestFirstTraversator(model.getMaze()[1][69]);
+
+        //transverse from node 0 0 //can change 0 0 to sprites location to search from their location
+        t.traverse(model.getMaze(), model.getMaze()[20][20]);
+
+        Traversator tt = new DepthLimitedDFSTraversator(20);
+        //Traversator t = new BestFirstTraversator(model.getMaze()[1][69]);
+
+        //transverse from node 0 0 //can change 0 0 to sprites location to search from their location
+        tt.traverse(model.getMaze(), model.getMaze()[25][25]);
 	}
 
 	// need to update maze.set()

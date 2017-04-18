@@ -61,9 +61,22 @@ public class GameView extends JPanel implements ActionListener{
         		int y1 = row * size;
         		
         		int id = 0;
+
+                id = maze.get(row, col).getId();
+
+                imageIndex = id;
+
+
+                if (imageIndex < 0){
+                    g2.setColor(Color.LIGHT_GRAY);//Empty cell
+                    g2.fillRect(x1, y1, size, size);
+                }else{
+                    g2.drawImage(sprites[imageIndex].getNext(), x1, y1, null);
+                }
        		
         		if (zoomOut){
-        			id = maze.get(row, col).getId();
+
+
         			if (id >= 5){
 	        			if (row == currentRow && col == currentCol){
 	        				g2.setColor(Color.YELLOW);
@@ -72,18 +85,17 @@ public class GameView extends JPanel implements ActionListener{
 	        			}
         				g2.fillRect(x1, y1, size, size);
         			}
+
+                    if(maze.get(row, col).isVisited()){
+                        g2.setColor(Color.BLACK);
+                        g2.fillRect(x1, y1, size, size);
+                    }
+
         		}else{
         			id = maze.get(currentRow - cellpadding + row, currentCol - cellpadding + col).getId();
         		}
         		
-        		imageIndex = id;
 
-        		if (imageIndex < 0){
-        			g2.setColor(Color.LIGHT_GRAY);//Empty cell
-        			g2.fillRect(x1, y1, size, size);   			
-        		}else{
-        			g2.drawImage(sprites[imageIndex].getNext(), x1, y1, null);
-        		}
         	}
         }
 	}
