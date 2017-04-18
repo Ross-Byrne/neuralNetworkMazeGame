@@ -23,7 +23,7 @@ public class GameRunner implements KeyListener{
     	Sprite[] sprites = getSprites();
     	view.setSprites(sprites);
     	
-    	//placePlayer();
+    	placePlayer();
     	
     	Dimension d = new Dimension(GameView.DEFAULT_VIEW_SIZE, GameView.DEFAULT_VIEW_SIZE);
     	view.setPreferredSize(d);
@@ -49,12 +49,7 @@ public class GameRunner implements KeyListener{
 
         //transverse from node 0 0 //can change 0 0 to sprites location to search from their location
         t.traverse(model.getMaze(), model.getMaze()[20][20]);
-
-        Traversator tt = new DepthLimitedDFSTraversator(20);
-        //Traversator t = new BestFirstTraversator(model.getMaze()[1][69]);
-
-        //transverse from node 0 0 //can change 0 0 to sprites location to search from their location
-        tt.traverse(model.getMaze(), model.getMaze()[25][25]);
+        
 	}
 
 	// need to update maze.set()
