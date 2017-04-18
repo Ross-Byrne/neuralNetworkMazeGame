@@ -4,6 +4,8 @@ import net.sourceforge.jFuzzyLogic.*;
 import net.sourceforge.jFuzzyLogic.plot.*;
 import net.sourceforge.jFuzzyLogic.rule.*;
 
+import java.util.List;
+
 /**
  * Created by Ross Byrne on 30/01/17.
  */
@@ -19,8 +21,15 @@ public class Runner {
         fis.evaluate();
 
         // Show output variable's chart
-        Variable tip = fb.getVariable("risk");
-        JFuzzyChart.get().chart(tip, tip.getDefuzzifier(), true);
-        System.out.println("Risk: " + tip.defuzzify());
+        Variable risk = fb.getVariable("risk");
+        System.out.println("Value: " + risk.getValue());
+
+        // can see that normal membership function wins
+        System.out.println("low: " + risk.getMembership("low"));
+        System.out.println("normal: " + risk.getMembership("normal"));
+        System.out.println("high: " + risk.getMembership("high"));
+
+        JFuzzyChart.get().chart(risk, risk.getDefuzzifier(), true);
+        System.out.println("Risk: " + risk.defuzzify());
     }
 }
