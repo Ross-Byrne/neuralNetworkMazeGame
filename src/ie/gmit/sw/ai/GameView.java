@@ -21,6 +21,9 @@ public class GameView extends JPanel implements ActionListener{
 	
 	public GameView(Maze maze) throws Exception{
 		this.maze = maze;
+		currentRow=maze.getPlayer().getRow();
+        currentCol=maze.getPlayer().getCol();
+
 		setBackground(Color.LIGHT_GRAY);
 		setDoubleBuffered(true);
 		timer = new Timer(300, this);
@@ -47,46 +50,46 @@ public class GameView extends JPanel implements ActionListener{
 		}
 	}
 
-	public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-              
-        cellspan = zoomOut ? maze.size() : 5;         
+
+        cellspan = zoomOut ? maze.size() : 5;
         final int size = DEFAULT_VIEW_SIZE/cellspan;
         g2.drawRect(0, 0, GameView.DEFAULT_VIEW_SIZE, GameView.DEFAULT_VIEW_SIZE);
-        
-        for(int row = 0; row < cellspan; row++) {
-        	for (int col = 0; col < cellspan; col++){  
-        		int x1 = col * size;
-        		int y1 = row * size;
-        		
-        		int id = 0;
-       		
-        		if (zoomOut){
-        			id = maze.get(row, col).getId();
-        			if (id >= 5){
-	        			if (row == currentRow && col == currentCol){
-	        				g2.setColor(Color.YELLOW);
-	        			}else{
-	        				g2.setColor(reds[(int) (Math.random() * 3)]);
-	        			}
-        				g2.fillRect(x1, y1, size, size);
-        			}
-        		}else{
-        			id = maze.get(currentRow - cellpadding + row, currentCol - cellpadding + col).getId();
-        		}
-        		
-        		imageIndex = id;
 
-        		if (imageIndex < 0){
-        			g2.setColor(Color.LIGHT_GRAY);//Empty cell
-        			g2.fillRect(x1, y1, size, size);   			
-        		}else{
-        			g2.drawImage(sprites[imageIndex].getNext(), x1, y1, null);
-        		}
-        	}
+        for(int row = 0; row < cellspan; row++) {
+            for (int col = 0; col < cellspan; col++){
+                int x1 = col * size;
+                int y1 = row * size;
+
+                int id = 0;
+
+                if (zoomOut){
+                    id = maze.get(row, col).getId();
+                    if (id >= 5){
+                        if (row == currentRow && col == currentCol){
+                            g2.setColor(Color.YELLOW);
+                        }else{
+                            g2.setColor(reds[(int) (Math.random() * 3)]);
+                        }
+                        g2.fillRect(x1, y1, size, size);
+                    }
+                }else{
+                    id = maze.get(currentRow - cellpadding + row, currentCol - cellpadding + col).getId();
+                }
+
+                imageIndex = id;
+
+                if (imageIndex < 0){
+                    g2.setColor(Color.LIGHT_GRAY);//Empty cell
+                    g2.fillRect(x1, y1, size, size);
+                }else{
+                    g2.drawImage(sprites[imageIndex].getNext(), x1, y1, null);
+                }
+            }
         }
-	}
+    }
 	
 	public void toggleZoom(){
 		zoomOut = !zoomOut;		

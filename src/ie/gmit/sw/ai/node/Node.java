@@ -105,10 +105,10 @@ public class Node {
 			if(maze[row][col + 1].getId() != 0) // only add if not a hedge
 				adjacents.add(maze[row][col + 1]); //Add East
 		}
-		
+
 		return (Node[]) adjacents.toArray(new Node[adjacents.size()]);
 	}
-	
+
 	public Direction[] getPaths() {
 		return paths;
 	}

@@ -7,19 +7,28 @@ Make maze array AtomicReferenceArray<Character> so it is concurrent.
  */
 
 import ie.gmit.sw.ai.node.Node;
+import ie.gmit.sw.ai.node.Node.Direction;
+import java.util.Deque;
+import java.util.LinkedList;
 import ie.gmit.sw.ai.node.SpiderNode;
 
 public class Maze {
 
 	private Object lock = new Object();	// used for locking when threads try to update the maze
 	private Node[][] maze;
+    private Node player;
 
 	public Maze(int dimension){
 
 		maze = new Node[dimension][dimension];
 		init();
 		buildMaze();
-		
+		setPaths();
+		unvisit();
+
+		//place player
+        placePlayer();
+
 		int featureNumber = 20;
 		addFeature(1, 0, featureNumber); //1 is a sword, 0 is a hedge
 		addFeature(2, 0, featureNumber); //2 is help, 0 is a hedge
@@ -44,6 +53,54 @@ public class Maze {
 			}
 		}
 	}
+
+    private void setPaths(){
+        Node node = maze[0][0];
+
+        Deque<Node> stack = new LinkedList<Node>();
+        stack.addFirst(node);
+
+        while (!stack.isEmpty()){
+            node = stack.poll();
+
+            Node[] adjacents = node.adjacentNodes(maze);
+
+            for (int i = 0; i < adjacents.length; i++) {
+                if (!adjacents[i].isVisited()){
+                    stack.addFirst(adjacents[i]);
+                    Direction dir = getDirection(node, adjacents[i]);
+                    node.addPath(dir);
+                    adjacents[i].addPath(opposite(dir));
+                    adjacents[i].setVisited(true);
+                }
+            }
+        }
+    }
+
+    protected void unvisit(){
+        for (int i = 0; i < maze.length; i++){
+            for (int j = 0; j < maze[i].length; j++){
+                maze[i][j].setVisited(false);
+                maze[i][j].setParent(null);
+            }
+        }
+    }
+
+    protected Direction getDirection(Node current, Node adjacent){
+        if (adjacent.getRow() == current.getRow() - 1 && adjacent.getCol() == current.getCol()) return Direction.North;
+        if (adjacent.getRow() == current.getRow() + 1 && adjacent.getCol() == current.getCol()) return Direction.South;
+        if (adjacent.getRow() == current.getRow() && adjacent.getCol() == current.getCol() - 1) return Direction.West;
+        if (adjacent.getRow() == current.getRow() && adjacent.getCol() == current.getCol() + 1) return Direction.East;
+        return null;
+    }
+
+    protected Direction opposite(Direction dir){
+        if (dir == Direction.North) return Direction.South;
+        if (dir == Direction.South) return Direction.North;
+        if (dir == Direction.East) return Direction.West;
+        if (dir == Direction.West) return Direction.East;
+        return null;
+    }
 	
 	private void addFeature(int feature, int replace, int number){
 		int counter = 0;
@@ -55,7 +112,7 @@ public class Maze {
 
 				// if it's a spider, create a spider node
 				if(feature > 5)
-					maze[row][col] = new SpiderNode(row, col, feature, lock, maze);
+					maze[row][col] = new SpiderNode(row, col, feature, lock, maze,getPlayer());
 
 				maze[row][col].setId(feature);
 				counter++;
@@ -74,7 +131,7 @@ public class Maze {
 					    maze[row + 1][col].setId(-1);
 				}
 			}
-		}		
+		}
 	}
 	
 	public Node[][] getMaze(){
@@ -88,6 +145,21 @@ public class Maze {
 	public void set(int row, int col, Node n){
 		this.maze[row][col] = n;
 	}
+
+    public Node getPlayer(){
+        return this.player;
+    }
+
+    public void placePlayer(){
+        //place the player at a random location within maze
+        int currentRow = (int) (GameRunner.MAZE_DIMENSION * Math.random());
+        int currentCol = (int) (GameRunner.MAZE_DIMENSION * Math.random());
+
+        //create the player node
+        player=new Node(currentRow,currentCol,5);
+        //set the player node
+        maze[currentRow][currentCol]= player;
+    }
 	
 	public int size(){
 		return this.maze.length;
@@ -104,4 +176,5 @@ public class Maze {
 		}
 		return sb.toString();
 	}
+
 }

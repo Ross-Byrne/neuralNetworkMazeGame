@@ -1,12 +1,12 @@
 package ie.gmit.sw.ai;
 
-import ie.gmit.sw.ai.node.Node;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 public class GameRunner implements KeyListener{
-	private static final int MAZE_DIMENSION = 100;
+	public static final int MAZE_DIMENSION = 100;
 	private static final int IMAGE_COUNT = 14;
 	private GameView view;
 	private Maze model;
@@ -16,11 +16,12 @@ public class GameRunner implements KeyListener{
 	public GameRunner() throws Exception{
 		model = new Maze(MAZE_DIMENSION);
     	view = new GameView(model);
-    	
+
+    	currentRow=model.getPlayer().getRow();
+        currentCol=model.getPlayer().getCol();
+
     	Sprite[] sprites = getSprites();
     	view.setSprites(sprites);
-    	
-    	placePlayer();
     	
     	Dimension d = new Dimension(GameView.DEFAULT_VIEW_SIZE, GameView.DEFAULT_VIEW_SIZE);
     	view.setPreferredSize(d);
@@ -38,14 +39,6 @@ public class GameRunner implements KeyListener{
         f.setVisible(true);
 	}
 
-	// need to update maze.set()
-	private void placePlayer(){   	
-    	currentRow = (int) (MAZE_DIMENSION * Math.random());
-    	currentCol = (int) (MAZE_DIMENSION * Math.random());
-    	model.set(currentRow, currentCol, new Node(currentRow, currentCol, 5)); //A Spartan warrior is at index 5
-    	updateView(); 		
-	}
-	
 	private void updateView(){
 		view.setCurrentRow(currentRow);
 		view.setCurrentCol(currentCol);
@@ -74,8 +67,18 @@ public class GameRunner implements KeyListener{
     
 	private boolean isValidMove(int row, int col){
 		if (row <= model.size() - 1 && col <= model.size() - 1 && model.get(row, col).getId() == -1){
-			model.set(currentRow, currentCol, new Node(currentRow, currentCol, -1));
-			model.set(row, col, new Node(row, col, 5));
+
+
+			model.set(currentRow, currentCol, model.get(row, col));
+
+            model.get(currentRow, currentCol).setRow(currentRow);
+            model.get(currentRow, currentCol).setCol(currentCol);
+
+			model.set(row, col, model.getPlayer());
+
+			model.get(row,col).setRow(row);
+            model.get(row,col).setCol(col);
+
 			return true;
 		}else{
 			return false; //Can't move
