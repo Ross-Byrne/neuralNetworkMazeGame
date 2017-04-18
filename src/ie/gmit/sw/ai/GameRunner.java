@@ -23,7 +23,7 @@ public class GameRunner implements KeyListener{
     	Sprite[] sprites = getSprites();
     	view.setSprites(sprites);
     	
-    	//placePlayer();
+    	placePlayer();
     	
     	Dimension d = new Dimension(GameView.DEFAULT_VIEW_SIZE, GameView.DEFAULT_VIEW_SIZE);
     	view.setPreferredSize(d);
