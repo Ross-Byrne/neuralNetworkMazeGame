@@ -7,24 +7,26 @@ public class DepthLimitedDFSTraversator implements Traversator{
 	private boolean keepRunning = true;
 	private long time = System.currentTimeMillis();
 	private int visitCount = 0;
+    private Node goal;
 	
-	public DepthLimitedDFSTraversator(int limit){
+	public DepthLimitedDFSTraversator(int limit,Node goal){
 		this.limit = limit;
+		this.goal = goal;
 	}
 	
 	public void traverse(Node[][] maze, Node node) {
 		this.maze = maze;
-		System.out.println("Search with limit " + limit);
+        // System.out.println("Search with limit " + limit);
 		dfs(node, 1);
 	}
 	
 	private void dfs(Node node, int depth){
 		if (!keepRunning || depth > limit) return;
-		
-		node.setVisited(true);	
+
+        node.setVisited(true);
 		visitCount++;
 		
-		if (node.isGoalNode()){
+		if (node.equals(goal)){
 	        time = System.currentTimeMillis() - time; //Stop the clock
 	        TraversatorStats.printStats(node, time, visitCount);
 	        keepRunning = false;

@@ -115,10 +115,10 @@ public class SpiderNode extends Node {
     private void search(int row, int col){
 
         //traverses using Best First Traversator to find player
-        Traversator t = new BestFirstTraversator(playerLoc);
+        //Traversator t = new BestFirstTraversator(playerLoc);
 
         //traverses using Depth Limited DFS Traversator to find player at a given limit
-        //Traversator t = new DepthLimitedDFSTraversator(10);
+        Traversator t = new DepthLimitedDFSTraversator(10,playerLoc);
 
         //transverse from node 0 0 //can change 0 0 to sprites location to search from their location
         t.traverse(maze, maze[row][col]);
