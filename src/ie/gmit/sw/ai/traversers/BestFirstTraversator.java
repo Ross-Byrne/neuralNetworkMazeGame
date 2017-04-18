@@ -29,11 +29,11 @@ public class BestFirstTraversator implements Traversator{
 				break;
 			}
 			
-			try { //Simulate processing each expanded node
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+//			try { //Simulate processing each expanded node
+//				Thread.sleep(1);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
 			
 			Node[] children = node.adjacentNodes(maze);
 			for (int i = 0; i < children.length; i++) {

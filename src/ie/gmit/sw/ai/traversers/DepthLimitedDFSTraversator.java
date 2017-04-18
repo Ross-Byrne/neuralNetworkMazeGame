@@ -33,11 +33,11 @@ public class DepthLimitedDFSTraversator implements Traversator{
 			return;
 		}
 		
-		try { //Simulate processing each expanded node
-			Thread.sleep(50);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//		try { //Simulate processing each expanded node
+//			Thread.sleep(50);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 		
 		Node[] children = node.adjacentNodes(maze);
 		for (int i = 0; i < children.length; i++) {
