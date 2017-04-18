@@ -35,7 +35,15 @@ public class Node {
         this.id = id;
     }
 
-    public int getRow() {
+    public void setRow(int row) {
+		this.row = row;
+	}
+
+	public void setCol(int col) {
+		this.col = col;
+	}
+
+	public int getRow() {
 		return row;
 	}
 
@@ -78,28 +86,28 @@ public class Node {
 		return (Node[]) children.toArray(new Node[children.size()]);
 	}
 
-    public Node[] adjacentNodes(Node[][] maze){
-        java.util.List<Node> adjacents = new java.util.ArrayList<Node>();
+	public Node[] adjacentNodes(Node[][] maze){
+		java.util.List<Node> adjacents = new java.util.ArrayList<Node>();
 
-        if (row > 0) {
-            if(maze[row - 1][col].getId() != 0) // only add if not a hedge
-                adjacents.add(maze[row - 1][col]); //Add North
-        }
-        if (row < maze.length - 1) {
-            if(maze[row + 1][col].getId() != 0) // only add if not a hedge
-                adjacents.add(maze[row + 1][col]); //Add South
-        }
-        if (col > 0) {
-            if(maze[row][col - 1].getId() != 0) // only add if not a hedge
-                adjacents.add(maze[row][col - 1]); //Add West
-        }
-        if (col < maze[row].length - 1) {
-            if(maze[row][col + 1].getId() != 0) // only add if not a hedge
-                adjacents.add(maze[row][col + 1]); //Add East
-        }
-
-        return (Node[]) adjacents.toArray(new Node[adjacents.size()]);
-    }
+		if (row > 0) {
+			if(maze[row - 1][col].getId() != 0) // only add if not a hedge
+				adjacents.add(maze[row - 1][col]); //Add North
+		}
+		if (row < maze.length - 1) {
+			if(maze[row + 1][col].getId() != 0) // only add if not a hedge
+				adjacents.add(maze[row + 1][col]); //Add South
+		}
+		if (col > 0) {
+			if(maze[row][col - 1].getId() != 0) // only add if not a hedge
+				adjacents.add(maze[row][col - 1]); //Add West
+		}
+		if (col < maze[row].length - 1) {
+			if(maze[row][col + 1].getId() != 0) // only add if not a hedge
+				adjacents.add(maze[row][col + 1]); //Add East
+		}
+		
+		return (Node[]) adjacents.toArray(new Node[adjacents.size()]);
+	}
 	
 	public Direction[] getPaths() {
 		return paths;
