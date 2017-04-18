@@ -44,7 +44,7 @@ public class BruteForceTraversator implements Traversator{
 
 			for (int i = 0; i < children.length; i++) {
 				if (children[i] != null && !children[i].isVisited()){
-                    System.out.println(node.toString());
+                    System.out.println(children[i].toString());
 					children[i].setParent(node);
 					if (dfs){
 						queue.addFirst(children[i]);
