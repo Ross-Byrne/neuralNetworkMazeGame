@@ -16,6 +16,7 @@ public class Maze {
 
 	private Object lock = new Object();	// used for locking when threads try to update the maze
 	private Node[][] maze;
+    private Node player;
 
 	public Maze(int dimension){
 
@@ -24,7 +25,10 @@ public class Maze {
 		buildMaze();
 		setPaths();
 		unvisit();
-		
+
+		//place player
+        placePlayer();
+
 		int featureNumber = 20;
 		addFeature(1, 0, featureNumber); //1 is a sword, 0 is a hedge
 		addFeature(2, 0, featureNumber); //2 is help, 0 is a hedge
@@ -51,8 +55,6 @@ public class Maze {
 	}
 
     private void setPaths(){
-
-
         Node node = maze[0][0];
 
         Deque<Node> stack = new LinkedList<Node>();
@@ -60,11 +62,8 @@ public class Maze {
 
         while (!stack.isEmpty()){
             node = stack.poll();
-            //node.setVisited(true);
-
 
             Node[] adjacents = node.adjacentNodes(maze);
-            //super.shuffle(adjacents);
 
             for (int i = 0; i < adjacents.length; i++) {
                 if (!adjacents[i].isVisited()){
@@ -113,7 +112,7 @@ public class Maze {
 
 				// if it's a spider, create a spider node
 				if(feature > 5)
-					maze[row][col] = new SpiderNode(row, col, feature, lock, maze);
+					maze[row][col] = new SpiderNode(row, col, feature, lock, maze,getPlayer());
 
 				maze[row][col].setId(feature);
 				counter++;
@@ -146,6 +145,21 @@ public class Maze {
 	public void set(int row, int col, Node n){
 		this.maze[row][col] = n;
 	}
+
+    public Node getPlayer(){
+        return this.player;
+    }
+
+    public void placePlayer(){
+        //place the player at a random location within maze
+        int currentRow = (int) (GameRunner.MAZE_DIMENSION * Math.random());
+        int currentCol = (int) (GameRunner.MAZE_DIMENSION * Math.random());
+
+        //create the player node
+        player=new Node(currentRow,currentCol,5);
+        //set the player node
+        maze[currentRow][currentCol]= player;
+    }
 	
 	public int size(){
 		return this.maze.length;

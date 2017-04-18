@@ -1,5 +1,9 @@
 package ie.gmit.sw.ai.node;
 
+import ie.gmit.sw.ai.traversers.BestFirstTraversator;
+import ie.gmit.sw.ai.traversers.DepthLimitedDFSTraversator;
+import ie.gmit.sw.ai.traversers.Traversator;
+
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -15,8 +19,9 @@ public class SpiderNode extends Node {
     private Node[][] maze = null;
     private ExecutorService executor = Executors.newFixedThreadPool(1);
     private volatile int moveNum = 0;
+    private Node playerLoc = null;
 
-    public SpiderNode(int row, int col, int id, Object lock, Node[][] maze) {
+    public SpiderNode(int row, int col, int id, Object lock, Node[][] maze ,Node player) {
 
         // setup constructor
         super(row, col, id);
@@ -24,6 +29,7 @@ public class SpiderNode extends Node {
         // set variables
         this.lock = lock;
         this.maze = maze;
+        this.playerLoc = player;
 
         // start moving the spider
         // run()
@@ -34,6 +40,9 @@ public class SpiderNode extends Node {
 
                     // sleep thread to simulate a movement pace
                     Thread.sleep(movementSpeed);
+
+                    //search
+                    search(row,col);
 
                     // start moving the spider
                     move();
@@ -103,6 +112,17 @@ public class SpiderNode extends Node {
         //moveNum++;
     } // move()
 
+    private void search(int row, int col){
+
+        //traverses using Best First Traversator to find player
+        Traversator t = new BestFirstTraversator(playerLoc);
+
+        //traverses using Depth Limited DFS Traversator to find player at a given limit
+        //Traversator t = new DepthLimitedDFSTraversator(10);
+
+        //transverse from node 0 0 //can change 0 0 to sprites location to search from their location
+        t.traverse(maze, maze[row][col]);
+    }
 
 
 
