@@ -14,6 +14,7 @@ public class SpiderNode extends Node {
     private Object lock = null;
     private Node[][] maze = null;
     private ExecutorService executor = Executors.newFixedThreadPool(1);
+    private Node lastNode = null;
     private volatile int moveNum = 0;
 
     public SpiderNode(int row, int col, int id, Object lock, Node[][] maze) {
@@ -65,7 +66,7 @@ public class SpiderNode extends Node {
             for (Node n : adjacentNodes) {
 
                 // check that the node is empty space
-                if (n.getId() == -1) {
+                if (n.getId() == -1 && !n.equals(lastNode)) {
 
                     // add node to list of available nodes
                     canMoveTo.add(n);
@@ -90,11 +91,40 @@ public class SpiderNode extends Node {
                 canMoveTo.get(index).setRow(oldX);
                 canMoveTo.get(index).setCol(oldY);
 
+                // save last node
+                lastNode = canMoveTo.get(index);
+
                 // move to that node
                 maze[newX][newY] = (SpiderNode)this;
 
                 // remove self from original spot
                 maze[oldX][oldY] = canMoveTo.get(index);
+
+            } else if(canMoveTo.size() < 1 && lastNode != null){ // if moved into a corner, go back to last node
+
+                // move to last node
+
+                int newX, newY, oldX, oldY;
+
+                oldX = getRow();
+                oldY = getCol();
+                newX = lastNode.getRow();
+                newY = lastNode.getCol();
+
+                // update X and Y
+                setRow(newX);
+                setCol(newY);
+                lastNode.setRow(oldX);
+                lastNode.setCol(oldY);
+
+                // save last node
+                lastNode = lastNode;
+
+                // move to that node
+                maze[newX][newY] = (SpiderNode)this;
+
+                // remove self from original spot
+                maze[oldX][oldY] = lastNode;
 
             } // if
 
