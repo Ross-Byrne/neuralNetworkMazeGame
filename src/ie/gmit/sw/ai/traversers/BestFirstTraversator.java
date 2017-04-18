@@ -15,13 +15,15 @@ public class BestFirstTraversator implements Traversator{
 		
         long time = System.currentTimeMillis();
     	int visitCount = 0;
+
+        //System.out.println("Searching for node: "+goal.toString());
     	
 		while(!queue.isEmpty()){
 			node = queue.poll();
 			node.setVisited(true);	
 			visitCount++;
 			
-			if (node.isGoalNode()){
+			if (node.equals(goal)){
 		        time = System.currentTimeMillis() - time; //Stop the clock
 		        TraversatorStats.printStats(node, time, visitCount);
 				break;
