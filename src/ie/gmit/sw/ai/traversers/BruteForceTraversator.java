@@ -1,5 +1,9 @@
 package ie.gmit.sw.ai.traversers;
 
+/*
+Taken from AI-MAZE_ALGOS project from moodle
+ */
+
 import java.util.*;
 import ie.gmit.sw.ai.node.*;
 public class BruteForceTraversator implements Traversator{
