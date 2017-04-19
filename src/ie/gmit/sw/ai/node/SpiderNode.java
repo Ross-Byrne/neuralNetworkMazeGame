@@ -19,13 +19,13 @@ public class SpiderNode extends Node {
     private Node[][] maze = null;
     private ExecutorService executor = Executors.newFixedThreadPool(1);
     private Node lastNode = null;
-    private Node playerLoc = null;
+    private PlayerNode player = null;
     private int id;
     private Node nextMove = null;
     private boolean hasNextMove = false;
 
 
-    public SpiderNode(int row, int col, int id, Object lock, Node[][] maze ,Node player) {
+    public SpiderNode(int row, int col, int id, Object lock, Node[][] maze ,PlayerNode player) {
 
         // setup constructor
         super(row, col, id);
@@ -33,7 +33,7 @@ public class SpiderNode extends Node {
         // set variables
         this.lock = lock;
         this.maze = maze;
-        this.playerLoc = player;
+        this.player = player;
         this.id = id;
 
         // start moving the spider
@@ -181,8 +181,8 @@ public class SpiderNode extends Node {
     } // swapNodes()
 
     private void search(int row, int col){
-        Traversator dlDFS = new DepthLimitedDFSTraversator(10,playerLoc);
-        Traversator bestFirst = new BestFirstTraversator(playerLoc);
+        Traversator dlDFS = new DepthLimitedDFSTraversator(10,player);
+        Traversator bestFirst = new BestFirstTraversator(player);
 
         switch(id){
 

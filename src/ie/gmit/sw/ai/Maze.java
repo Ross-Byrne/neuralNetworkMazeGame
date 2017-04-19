@@ -10,13 +10,15 @@ import ie.gmit.sw.ai.node.Node;
 import ie.gmit.sw.ai.node.Node.Direction;
 import java.util.Deque;
 import java.util.LinkedList;
+
+import ie.gmit.sw.ai.node.PlayerNode;
 import ie.gmit.sw.ai.node.SpiderNode;
 
 public class Maze {
 
 	private Object lock = new Object();	// used for locking when threads try to update the maze
 	private Node[][] maze;
-    private Node player;
+    private PlayerNode player;
 
 	public Maze(int dimension){
 
@@ -118,7 +120,7 @@ public class Maze {
 				else if(feature == 5) { // if player
 
 					//create the player node
-					player = new Node(row,col,5);
+					player = new PlayerNode(row,col,5);
 
 					//set the player node
 					maze[row][col] = player;
@@ -162,7 +164,7 @@ public class Maze {
 	    this.maze[row][col] = n;
 	}
 
-    public Node getPlayer(){
+    public PlayerNode getPlayer(){
         return this.player;
     }
 	
