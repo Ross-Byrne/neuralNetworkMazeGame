@@ -45,7 +45,11 @@ public class SpiderNode extends Node {
                     search(getRow(), getCol());
 
                     // start moving the spider
-                    randomMove();
+                    if(hasNextMove){        // if spider has next move
+                        moveToNextNode();   // move to next node
+                    } else {                // otherwise
+                        randomMove();       // move randomly
+                    }
 
                 } catch (Exception ex) {
 
@@ -58,26 +62,46 @@ public class SpiderNode extends Node {
 
     private void moveToNextNode(){
 
-//        if(nextMove != null){
-//
-//            synchronized (lock) {
-//
-//                for(Node n : adjacentNodes(maze)){
-//                    if(nextMove.equals(n)){
-//
-//
-//                    }
-//                }
-//
-//            } // synchronized
-//
-//        } else {
-//
-//            randomMove();
-//
-//            hasNextMove = false;
-//
-//        } // if
+        if(nextMove != null){
+
+            synchronized (lock) {
+
+                for(Node n : adjacentNodes(maze)){
+
+                    // check if next move is an adjacent node
+                    if(nextMove.equals(n)){
+
+                        // swap nodes to move
+                        swapNodes(this, nextMove);
+
+                        // reset nextMove
+                        nextMove = null;
+                        hasNextMove = false;
+
+                        // return
+                        return;
+                    } // if
+                } // for
+
+                // if not returned, didn't have next move
+                // move randomly instead
+                randomMove();
+
+                // reset next move
+                nextMove = null;
+                hasNextMove = false;
+                return;
+            } // synchronized
+
+        } else { // if nextMove is null
+
+            // move randomly
+            randomMove();
+
+            // flag as not having next move
+            hasNextMove = false;
+
+        } // if
 
     } // moveToNextNode()
 
