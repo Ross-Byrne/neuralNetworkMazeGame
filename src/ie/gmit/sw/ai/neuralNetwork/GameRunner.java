@@ -7,7 +7,7 @@ public class GameRunner {
     /*
         1 = Health (2 = Healthy, 1 = Minor Injuries, 0 = Serious Injuries)
         2 = Has Sword (1 = Yes, 0 = No)
-        3 = Has Gun (1 = Yes, 0 = No)
+        3 = Has Bomb (1 = Yes, 0 = No)
         4 = Number of Enemies
      */
 
@@ -40,9 +40,9 @@ public class GameRunner {
         System.out.println("Run Away");
     }
 
-    public void action(double health, double sword, double gun, double enemies) throws Exception{
+    public void action(double health, double sword, double bomb, double enemies) throws Exception{
 
-        double[] params = {health, sword, gun, enemies};
+        double[] params = {health, sword, bomb, enemies};
 
         NeuralNetwork nn = new NeuralNetwork(Activator.ActivationFunction.Sigmoid, 4, 3, 4);
         Trainator trainer = new BackpropagationTrainer(nn);
@@ -74,17 +74,21 @@ public class GameRunner {
     }
 
     public static void main(String[] args) throws Exception{
-        double health = 2;
-        double sword = 1;
-        double gun = 0;
-        double enemies = 2;
-        double[] v = {1, 2, 3, enemies};
+//        double health = 2;
+//        double sword = 1;
+//        double gun = 0;
+//        double enemies = 2;
+//        double[] v = {1, 2, 3, enemies};
+//
+//        double[] result = null;
+//
+//        result = Utils.normalize(v, 0.0, 2.0);
+//
+//        System.out.println(result[0]);
+        //new GameRunner().action(health, sword, gun, result[0]);
 
-        double[] result = null;
+        CombatDecisionNN combatNet = new CombatDecisionNN();
 
-        result = Utils.normalize(v, 0.0, 2.0);
-
-        System.out.println(result[0]);
-        new GameRunner().action(health, sword, gun, result[0]);
+        combatNet.action(2, 1, 1, 1);
     }
 }
