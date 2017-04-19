@@ -26,8 +26,8 @@ public class Maze {
 		setPaths();
 		unvisit();
 
-		//place player
-        placePlayer();
+        // place the player in maze
+		addFeature(5, -1, 1);
 
 		int featureNumber = 20;
 		addFeature(1, 0, featureNumber); //1 is a sword, 0 is a hedge
@@ -111,14 +111,27 @@ public class Maze {
 			if (maze[row][col].getId() == replace){
 
 				// if it's a spider, create a spider node
-				if(feature > 5)
-					maze[row][col] = new SpiderNode(row, col, feature, lock, maze,getPlayer());
+				if(feature > 5) {
 
-				maze[row][col].setId(feature);
+					maze[row][col] = new SpiderNode(row, col, feature, lock, maze, getPlayer());
+				}
+				else if(feature == 5) { // if player
+
+					//create the player node
+					player = new Node(row,col,5);
+
+					//set the player node
+					maze[row][col] = player;
+				}
+				else
+				{
+					maze[row][col].setId(feature);
+				} // if
+
 				counter++;
-			}
-		}
-	}
+			} // if
+		} // while
+	} // addFeature()
 	
 	private void buildMaze(){ 
 		for (int row = 1; row < maze.length - 1; row++){
@@ -143,22 +156,14 @@ public class Maze {
 	}
 	
 	public void set(int row, int col, Node n){
-		this.maze[row][col] = n;
+
+	    n.setRow(row);
+	    n.setCol(col);
+	    this.maze[row][col] = n;
 	}
 
     public Node getPlayer(){
         return this.player;
-    }
-
-    public void placePlayer(){
-        //place the player at a random location within maze
-        int currentRow = (int) (GameRunner.MAZE_DIMENSION * Math.random());
-        int currentCol = (int) (GameRunner.MAZE_DIMENSION * Math.random());
-
-        //create the player node
-        player=new Node(currentRow,currentCol,5);
-        //set the player node
-        maze[currentRow][currentCol]= player;
     }
 	
 	public int size(){

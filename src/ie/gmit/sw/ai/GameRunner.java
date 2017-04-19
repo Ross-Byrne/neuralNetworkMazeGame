@@ -6,7 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class GameRunner implements KeyListener{
-	public static final int MAZE_DIMENSION = 100;
+	private static final int MAZE_DIMENSION = 100;
 	private static final int IMAGE_COUNT = 14;
 	private GameView view;
 	private Maze model;
@@ -68,16 +68,11 @@ public class GameRunner implements KeyListener{
 	private boolean isValidMove(int row, int col){
 		if (row <= model.size() - 1 && col <= model.size() - 1 && model.get(row, col).getId() == -1){
 
-
+			// move node player is going to move to, to the players place
 			model.set(currentRow, currentCol, model.get(row, col));
 
-            model.get(currentRow, currentCol).setRow(currentRow);
-            model.get(currentRow, currentCol).setCol(currentCol);
-
+			// move the player to the next position
 			model.set(row, col, model.getPlayer());
-
-			model.get(row,col).setRow(row);
-            model.get(row,col).setCol(col);
 
 			return true;
 		}else{
