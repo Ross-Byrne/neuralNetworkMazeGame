@@ -1,5 +1,7 @@
 package ie.gmit.sw.ai.node;
 
+import ie.gmit.sw.ai.neuralNetwork.CombatDecisionNN;
+
 /**
  * Created by Martin Coleman on 19/04/2017.
  */
@@ -8,9 +10,15 @@ public class PlayerNode extends Node {
     private int bombs;
     private boolean sword;
     private int noOfEnemies;
+    private CombatDecisionNN combatNet = null;
 
     public PlayerNode(int row, int col, int id) {
+
         super(row, col, id);
+
+        // instantiate neural network that decides whether to fight, panic, heal or run away
+        combatNet = new CombatDecisionNN();
+
     }
 
     public int getHealth() {

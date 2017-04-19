@@ -99,7 +99,7 @@ public class CombatDecisionNN {
         }
 
         int output = (Utils.getMaxIndex(result) + 1);
-        System.out.println("Output: " + output);
+        //System.out.println("Output: " + output);
 
         switch(output){
             case 1:
