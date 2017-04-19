@@ -89,6 +89,22 @@ public class GameRunner {
 
         CombatDecisionNN combatNet = new CombatDecisionNN();
 
-        combatNet.action(2, 1, 1, 1);
+        combatNet.action(0.5, 1, 1, 0.5); // attack
+        combatNet.action(0, 1, 1, 0);
+        combatNet.action(0, 1, 1, 0);
+        combatNet.action(0, 1, 1, 0);
+        combatNet.action(0.5, 0, 0, 0.5); // panic
+        combatNet.action(0.5, 0, 0, 0.5);
+        combatNet.action(0.5, 0, 0, 0.5);
+        combatNet.action(0.5, 0, 0, 0.5);
+        combatNet.action(0, 0, 1, 1);
+        combatNet.action(0, 0, 1, 1); // run
+        combatNet.action(0, 0, 1, 1);
+        combatNet.action(0, 0, 1, 1);
+        combatNet.action(0, 1, 0, 0); // heal
+        combatNet.action(0, 1, 0, 0);
+        combatNet.action(0, 1, 0, 0);
+        combatNet.action(0, 1, 0, 0);
+
     }
 }
