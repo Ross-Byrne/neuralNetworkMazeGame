@@ -182,7 +182,7 @@ public class SpiderNode extends Node {
 
     private void search(int row, int col){
         Traversator dlDFS = new DepthLimitedDFSTraversator(10,player);
-        Traversator bestFirst = new BestFirstTraversator(player);
+        //Traversator bestFirst = new BestFirstTraversator(player);
 
         switch(id){
 
@@ -197,7 +197,7 @@ public class SpiderNode extends Node {
                 //System.out.println("Blue Spider");
 
                 //transverse from sprites location using bestFirstTraverser
-                bestFirst.traverse(maze, maze[row][col]);
+                //bestFirst.traverse(maze, maze[row][col]);
                 break;
 
             case 8:
@@ -216,18 +216,30 @@ public class SpiderNode extends Node {
 
             case 10:
                 //System.out.println("Grey Spider");
+
+                //transverse from sprites location using Depth Limited DFS
+                dlDFS.traverse(maze, maze[row][col]);
                 break;
 
             case 11:
                 //System.out.println("Orange Spider");
+
+                //transverse from sprites location using Depth Limited DFS
+                dlDFS.traverse(maze, maze[row][col]);
                 break;
 
             case 12:
                 //System.out.println("Red Spider");
+
+                //transverse from sprites location using Depth Limited DFS
+                dlDFS.traverse(maze, maze[row][col]);
                 break;
 
             case 13:
                 //System.out.println("Yellow Spider");
+
+                //transverse from sprites location using Depth Limited DFS
+                dlDFS.traverse(maze, maze[row][col]);
                 break;
             default:
                 System.out.println("Not a Spider");
