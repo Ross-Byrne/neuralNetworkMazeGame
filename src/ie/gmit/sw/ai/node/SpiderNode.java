@@ -21,6 +21,7 @@ public class SpiderNode extends Node {
     private Node lastNode = null;
     private volatile int moveNum = 0;
     private Node playerLoc = null;
+    private int id;
 
     public SpiderNode(int row, int col, int id, Object lock, Node[][] maze ,Node player) {
 
@@ -31,6 +32,7 @@ public class SpiderNode extends Node {
         this.lock = lock;
         this.maze = maze;
         this.playerLoc = player;
+        this.id = id;
 
         // start moving the spider
         // run()
@@ -143,18 +145,75 @@ public class SpiderNode extends Node {
     } // move()
 
     private void search(int row, int col){
+        Traversator dlDFS = new DepthLimitedDFSTraversator(10,playerLoc);
+        Traversator bestFirst = new BestFirstTraversator(playerLoc);
+
+        switch(id){
+
+            case 6:
+                //System.out.println("Black Spider");
+
+                //transverse from sprites location using Depth Limited DFS
+                dlDFS.traverse(maze, maze[row][col]);
+                break;
+
+            case 7:
+                //System.out.println("Blue Spider");
+
+                //transverse from sprites location using bestFirstTraverser
+                bestFirst.traverse(maze, maze[row][col]);
+                break;
+
+            case 8:
+                //System.out.println("Brown Spider");
+
+                //transverse from sprites location using Depth Limited DFS
+                dlDFS.traverse(maze, maze[row][col]);
+                break;
+
+            case 9:
+                //System.out.println("Green Spider");
+
+                //transverse from sprites location using Depth Limited DFS
+                dlDFS.traverse(maze, maze[row][col]);
+                break;
+
+            case 10:
+                //System.out.println("Grey Spider");
+                break;
+
+            case 11:
+                //System.out.println("Orange Spider");
+                break;
+
+            case 12:
+                //System.out.println("Red Spider");
+                break;
+
+            case 13:
+                //System.out.println("Yellow Spider");
+                break;
+            default:
+                System.out.println("Not a Spider");
+                break;
+
+
+        }
+
+
 
         //traverses using Best First Traversator to find player
         //Traversator t = new BestFirstTraversator(playerLoc);
 
         //traverses using Depth Limited DFS Traversator to find player at a given limit
-        Traversator t = new DepthLimitedDFSTraversator(10,playerLoc);
+        //Traversator t = new DepthLimitedDFSTraversator(10,playerLoc);
 
         //transverse from node 0 0 //can change 0 0 to sprites location to search from their location
-        t.traverse(maze, maze[row][col]);
+        //t.traverse(maze, maze[row][col]);
     }
 
 
 
 
 } // class
+
