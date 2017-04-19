@@ -47,4 +47,9 @@ public class BestFirstTraversator implements Traversator{
 			Collections.sort(queue,(Node current, Node next) -> current.getHeuristic(goal) - next.getHeuristic(goal));		
 		}
 	}
+
+    @Override
+    public Node getNextNode() {
+        return null;
+    }
 }

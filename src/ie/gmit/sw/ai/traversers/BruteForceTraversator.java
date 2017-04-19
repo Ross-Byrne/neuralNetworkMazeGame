@@ -59,4 +59,9 @@ public class BruteForceTraversator implements Traversator{
 			}			
 		}
 	}
+
+    @Override
+    public Node getNextNode() {
+        return null;
+    }
 }

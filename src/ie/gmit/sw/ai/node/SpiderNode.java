@@ -19,9 +19,11 @@ public class SpiderNode extends Node {
     private Node[][] maze = null;
     private ExecutorService executor = Executors.newFixedThreadPool(1);
     private Node lastNode = null;
-    private volatile int moveNum = 0;
     private Node playerLoc = null;
     private int id;
+    private Node nextMove = null;
+    private boolean hasNextMove = false;
+
 
     public SpiderNode(int row, int col, int id, Object lock, Node[][] maze ,Node player) {
 
@@ -48,7 +50,11 @@ public class SpiderNode extends Node {
                     search(getRow(), getCol());
 
                     // start moving the spider
-                    move();
+                    if(hasNextMove){        // if spider has next move
+                        moveToNextNode();   // move to next node
+                    } else {                // otherwise
+                        randomMove();       // move randomly
+                    }
 
                 } catch (Exception ex) {
 
@@ -59,10 +65,54 @@ public class SpiderNode extends Node {
 
     } // constructor
 
+    private void moveToNextNode(){
 
-    // Method for moving the spider
+        if(nextMove != null){
+
+            synchronized (lock) {
+
+                for(Node n : adjacentNodes(maze)){
+
+                    // check if next move is an adjacent node
+                    if(nextMove.equals(n)){
+
+                        // swap nodes to move
+                        swapNodes(this, nextMove);
+
+                        // reset nextMove
+                        nextMove = null;
+                        hasNextMove = false;
+
+                        // return
+                        return;
+                    } // if
+                } // for
+
+                // if not returned, didn't have next move
+                // move randomly instead
+                randomMove();
+
+                // reset next move
+                nextMove = null;
+                hasNextMove = false;
+                return;
+            } // synchronized
+
+        } else { // if nextMove is null
+
+            // move randomly
+            randomMove();
+
+            // flag as not having next move
+            hasNextMove = false;
+
+        } // if
+
+    } // moveToNextNode()
+
+    // Method for randomly moving the spider
     // run in a thread
-    private void move(){
+    private void randomMove(){
 
         synchronized (lock) {
 
@@ -85,64 +135,50 @@ public class SpiderNode extends Node {
             } // if
 
             if (canMoveTo.size() > 0) {
-                int newX, newY, oldX, oldY;
 
-                oldX = getRow();
-                oldY = getCol();
-
-                // pick a random index to move to
+                // pick a random index to randomMove to
                 int index = rand.nextInt(canMoveTo.size());
 
-                newX = canMoveTo.get(index).getRow();
-                newY = canMoveTo.get(index).getCol();
-
-                // update X and Y
-                setRow(newX);
-                setCol(newY);
-                canMoveTo.get(index).setRow(oldX);
-                canMoveTo.get(index).setCol(oldY);
-
-                // save last node
-                lastNode = canMoveTo.get(index);
-
-                // move to that node
-                maze[newX][newY] = (SpiderNode)this;
-
-                // remove self from original spot
-                maze[oldX][oldY] = canMoveTo.get(index);
+                // move player to selected adjacent node
+                swapNodes(this, canMoveTo.get(index));
 
             } else if(canMoveTo.size() < 1 && lastNode != null){ // if moved into a corner, go back to last node
 
-                // move to last node
-
-                int newX, newY, oldX, oldY;
-
-                oldX = getRow();
-                oldY = getCol();
-                newX = lastNode.getRow();
-                newY = lastNode.getCol();
-
-                // update X and Y
-                setRow(newX);
-                setCol(newY);
-                lastNode.setRow(oldX);
-                lastNode.setCol(oldY);
-
-                // save last node
-                lastNode = lastNode;
-
-                // move to that node
-                maze[newX][newY] = (SpiderNode)this;
-
-                // remove self from original spot
-                maze[oldX][oldY] = lastNode;
+                // randomMove to last node
+                swapNodes(this, lastNode);
 
             } // if
 
         } // synchronized()
 
-        //moveNum++;
-    } // move()
+    } // randomMove()
+
+    private void swapNodes(Node x, Node y){
+
+        int newX, newY, oldX, oldY;
+
+        // save indexes
+        oldX = x.getRow();
+        oldY = x.getCol();
+        newX = y.getRow();
+        newY = y.getCol();
+
+        // update X and Y
+        x.setRow(newX);
+        x.setCol(newY);
+        y.setRow(oldX);
+        y.setCol(oldY);
+
+        // save last node
+        lastNode = y;
+
+        // randomMove to that node
+        maze[newX][newY] = x;
+
+        // remove self from original spot
+        maze[oldX][oldY] = lastNode;
+
+    } // swapNodes()
 
     private void search(int row, int col){
         Traversator dlDFS = new DepthLimitedDFSTraversator(10,playerLoc);
@@ -200,16 +236,16 @@ public class SpiderNode extends Node {
 
         }
 
+        // get the next node to move to
+        nextMove = dlDFS.getNextNode();
 
+        // flag as having a next move
+        if(nextMove != null){
+            hasNextMove = true;
+        } else {
+            hasNextMove = false;
+        }
 
-        //traverses using Best First Traversator to find player
-        //Traversator t = new BestFirstTraversator(playerLoc);
-
-        //traverses using Depth Limited DFS Traversator to find player at a given limit
-        //Traversator t = new DepthLimitedDFSTraversator(10,playerLoc);
-
-        //transverse from node 0 0 //can change 0 0 to sprites location to search from their location
-        //t.traverse(maze, maze[row][col]);
     }
 
 

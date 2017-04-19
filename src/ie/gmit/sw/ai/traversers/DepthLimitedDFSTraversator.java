@@ -50,7 +50,24 @@ public class DepthLimitedDFSTraversator implements Traversator{
 		if(pathToGoal.size() > 0)
             System.out.println("Path size: " + pathToGoal.size());
     }
-	
+
+    // gets the next node in the path
+    // to the goal node if one was found
+    // otherwise returns null
+    public Node getNextNode(){
+
+	    if(pathToGoal.size() > 0){
+
+	        return pathToGoal.getFirst();
+        }
+        else
+        {
+
+	        return null;
+        } // if
+
+    } // getNextNode()
+
 	private boolean dfs(Node node, int depth){
 		if (!keepRunning || depth > limit) return false;
 
@@ -60,6 +77,7 @@ public class DepthLimitedDFSTraversator implements Traversator{
 		visitCount++;
 		
 		if (node.equals(goal)){
+
 		    pathToGoal.addFirst(node);
             System.out.println("Goal Found by: " + start.hashCode());
             time = System.currentTimeMillis() - time; //Stop the clock

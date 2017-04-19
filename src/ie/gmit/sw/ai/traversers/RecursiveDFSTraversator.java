@@ -12,8 +12,13 @@ public class RecursiveDFSTraversator implements Traversator{
 		this.maze = maze;
 		dfs(node);
 	}
-	
-	private void dfs(Node node){
+
+    @Override
+    public Node getNextNode() {
+        return null;
+    }
+
+    private void dfs(Node node){
 		if (!keepRunning) return;
 		
 		node.setVisited(true);	
