@@ -20,6 +20,7 @@ public class Node {
 	private int row = -1;
 	private int col = -1;
 	private int distance;
+	private boolean hostile= false;
 	
 	public Node(int row, int col, int id) {
 		this.row = row;
@@ -159,6 +160,14 @@ public class Node {
 	public void setPathCost(int distance) {
 		this.distance = distance;
 	}
+
+    public boolean isHostile() {
+        return hostile;
+    }
+
+    public void setHostile(boolean hostile) {
+        this.hostile = hostile;
+    }
 
 	public String toString() {
 		return "[" + row + "/" + col + "]";
