@@ -7,7 +7,7 @@ import ie.gmit.sw.ai.neuralNetwork.CombatDecisionNN;
  * Created by Martin Coleman on 19/04/2017.
  */
 public class PlayerNode extends Node {
-    private int health;
+    private int health = 100;
     private int bombs;
     private boolean sword;
     private int noOfEnemies;
@@ -35,6 +35,14 @@ public class PlayerNode extends Node {
 
         // decide what to do
         try {
+
+            // set health in health classifier
+            fuzzyHealthClassifier.setInputVariable("health", getHealth());
+
+            // get the health stat from fuzzy health classifier
+            String injuriesStatus = fuzzyHealthClassifier.getWinningMembership("injuries");
+
+            System.out.println(injuriesStatus);
 
             combatNet.action(1, 1, 0, 0);
 
