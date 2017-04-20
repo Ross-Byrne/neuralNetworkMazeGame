@@ -40,6 +40,10 @@ public class GameRunner implements KeyListener{
 	}
 
 	private void updateView(){
+
+		currentRow=model.getPlayer().getRow();
+		currentCol=model.getPlayer().getCol();
+
 		view.setCurrentRow(currentRow);
 		view.setCurrentCol(currentCol);
 	}
@@ -59,7 +63,7 @@ public class GameRunner implements KeyListener{
         	return;
         }
         
-        updateView();       
+        updateView();
     }
     public void keyReleased(KeyEvent e) {} //Ignore
 	public void keyTyped(KeyEvent e) {} //Ignore

@@ -158,13 +158,13 @@ public class PlayerNode extends Node {
                     attack(spider);
                     break;
                 case 2: // panic
-                    panic();
+                    panic(spider);
                     break;
                 case 3: // heal
-                    heal();
+                    heal(spider);
                     break;
                 default: // run away
-                    runAway();
+                    runAway(spider);
 
             } // switch
 
@@ -243,19 +243,29 @@ public class PlayerNode extends Node {
 
     } // attack()
 
-    private void panic(){
+    private void panic(SpiderNode spider){
         System.out.println("Panic!");
 
-    }
+    } // panic()
 
-    private void heal(){
+    private void heal(SpiderNode spider){
         System.out.println("Heal!");
-    }
 
-    private void runAway(){
+        // try and flee
+        flee(spider);
+
+        // heal
+        increaseHealth(10);
+
+    } // heal()
+
+    private void runAway(SpiderNode spider){
         System.out.println("Run Away!");
 
-    }
+        // try and flee
+        flee(spider);
+
+    } // runAway()
 
     // checks for enemies that are right next to the player
     private void checkForEnemies(){
@@ -284,6 +294,51 @@ public class PlayerNode extends Node {
         } // if
 
     } // checkForEnemies()
+
+    public void flee(Node enemy){
+
+        Node[] adjacentNodes = adjacentNodes(maze);
+        Node move = null;
+        int lowestHeurstic=1001;
+
+        for (Node n : adjacentNodes) {
+
+            if(n.getHeuristic(enemy)<lowestHeurstic){
+                move=n;
+            }
+
+        } // for
+
+        nextMove=move;
+
+        // move the player
+        swapNodes(this, nextMove);
+
+    }
+
+    private void swapNodes(Node x, Node y){
+
+        int newX, newY, oldX, oldY;
+
+        // save indexes
+        oldX = x.getRow();
+        oldY = x.getCol();
+        newX = y.getRow();
+        newY = y.getCol();
+
+        // update X and Y
+        x.setRow(newX);
+        x.setCol(newY);
+        y.setRow(oldX);
+        y.setCol(oldY);
+
+        // randomMove to that node
+        maze[newX][newY] = x;
+
+        // remove self from original spot
+        maze[oldX][oldY] = y;
+
+    } // swapNodes()
 
     public int getHealth() {
         return health;

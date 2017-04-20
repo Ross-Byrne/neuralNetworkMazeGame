@@ -183,30 +183,15 @@ public class SpiderNode extends Node {
         Node move = null;
         int lowestHeurstic=1001;
 
-
-
         for (Node n : adjacentNodes) {
-
-            //System.out.println(n.getHeuristic(enemy));
 
             if(n.getHeuristic(enemy)<lowestHeurstic){
                 move=n;
             }
 
-            System.out.println(lowestHeurstic);
-
-
-
-            // check that the node is empty space
-            //if (n.getId() == -1 && !n.equals(lastNode)&& n.getId()!=5) {
-
-                // add node to list of available nodes
-
-            //} // if
         } // for
 
         nextMove=move;
-
     }
 
     private void swapNodes(Node x, Node y){
