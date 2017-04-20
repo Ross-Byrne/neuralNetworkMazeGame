@@ -102,7 +102,23 @@ public class PlayerNode extends Node {
                 bombStatus = 1;
 
             // get combat decision
-            combatNet.action(healthStatus, swordStatus, bombStatus, enemyStatus);
+            int result = combatNet.action(healthStatus, swordStatus, bombStatus, enemyStatus);
+
+            // execute decision
+            switch (result){
+                case 1: // attack
+                    System.out.println("Attack!");
+                    break;
+                case 2:
+                    System.out.println("Panic!");
+                    break;
+                case 3:
+                    System.out.println("Heal!");
+                    break;
+                    default:
+                        System.out.println("Run Away!");
+
+            } // switch
 
         }catch (Exception ex){
 

@@ -73,20 +73,6 @@ public class CombatDecisionNN {
             { 1, 0, 0, 0 }, { 0, 0, 1, 0 }, { 0, 0, 1, 0 } // serious injuries, enemies covered
     };
 
-    public void panic(){
-        System.out.println("Panic");
-    }
-
-    public void attack(){
-        System.out.println("Attack");
-    }
-
-    public void runAway(){
-        System.out.println("Run Away");
-    }
-    public void heal(){
-        System.out.println("Heal");
-    }
 
     public int action(double health, double sword, double bomb, double enemies) throws Exception{
 
@@ -102,16 +88,16 @@ public class CombatDecisionNN {
 
         switch(output){
             case 1:
-                attack();
+                // attack
                 return 1;
             case 2:
-                panic();
+                // panic
                 return 2;
             case 3:
-                heal();
+                // heal
                 return  3;
             default:
-                runAway();
+                // run away
                 return 4;
         } // switch
 
