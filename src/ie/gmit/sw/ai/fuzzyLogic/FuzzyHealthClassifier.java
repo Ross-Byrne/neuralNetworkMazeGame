@@ -31,31 +31,30 @@ public class FuzzyHealthClassifier {
         injuries = fb.getVariable("injuries");
 
         // set the variables
-        fis.setVariable("health", 50);
+        //fis.setVariable("health", 50);
 
-        fis.evaluate();
 
         // Show output variable's chart
 
-        System.out.println("Value: " + injuries.getValue());
+//        System.out.println("Value: " + injuries.getValue());
+//
+//        List<LinguisticTerm> linguisticTerms = injuries.linguisticTermsSorted();
+//        System.out.println("size: " + linguisticTerms.size() + " first: " + linguisticTerms.get(0).getMembershipFunction());
+//
+//        // can see that normal membership function wins
+//        System.out.println("Low Health: " + injuries.getMembership("serious"));
+//        System.out.println("Normal Health: " + injuries.getMembership("minor"));
+//        System.out.println("High Health: " + injuries.getMembership("none"));
+//
+//        //JFuzzyChart.get().chart(injuries, injuries.getDefuzzifier(), true);
+//        System.out.println("Injuries: " + injuries.defuzzify());
+//
+//        try{
+//            System.out.println(getWinningMembership("injuries"));
+//        }catch (Exception e){
+//
+//        }
 
-        List<LinguisticTerm> linguisticTerms = injuries.linguisticTermsSorted();
-        System.out.println("size: " + linguisticTerms.size() + " first: " + linguisticTerms.get(0).getMembershipFunction());
-
-        // can see that normal membership function wins
-        System.out.println("Low Health: " + injuries.getMembership("serious"));
-        System.out.println("Normal Health: " + injuries.getMembership("minor"));
-        System.out.println("High Health: " + injuries.getMembership("none"));
-
-        //JFuzzyChart.get().chart(injuries, injuries.getDefuzzifier(), true);
-        System.out.println("Injuries: " + injuries.defuzzify());
-
-        try{
-            System.out.println(getWinningMembership("injuries"));
-        }catch (Exception e){
-
-        }
-        
     }
 
     // sets the value for an input variable
@@ -69,6 +68,9 @@ public class FuzzyHealthClassifier {
     // gets the name of the winning membership function
     // that belongs to the output variable passed to method
     public String getWinningMembership(String outputVar) throws Exception {
+
+        // evaluate the fuzzy logic
+        fis.evaluate();
 
         Variable variable;
         double value = 0;
