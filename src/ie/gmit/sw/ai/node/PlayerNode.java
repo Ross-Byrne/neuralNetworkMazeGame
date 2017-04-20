@@ -154,7 +154,7 @@ public class PlayerNode extends Node {
             // get combat decision
             int result = combatNet.action(healthStatus, swordStatus, bombStatus, enemyStatus);
 
-            System.out.println("======================================================================");
+            System.out.println("\n===============================================");
             System.out.println("Stats");
             System.out.println("HealthStat: " + healthStatus);
             System.out.println("SwordStat: " + swordStatus);
@@ -162,7 +162,7 @@ public class PlayerNode extends Node {
             System.out.println("enemyStatus: " + enemyStatus);
             System.out.println("Actual Health: " + getHealth());
 
-            System.out.println("======================================================================");
+            System.out.println("===============================================");
 
             // execute decision
             switch (result){
@@ -187,7 +187,8 @@ public class PlayerNode extends Node {
     } // startCombat()
 
     private void attack(SpiderNode spider){
-        System.out.println("Attack!");
+        System.out.println("===============================================");
+        System.out.println("Attacking!");
 
         // flag spider as in combat
         spider.setInCombat(true);
@@ -251,12 +252,13 @@ public class PlayerNode extends Node {
 
         System.out.println("Player's Health: " + getHealth());
 
-        System.out.println("======================================================================\n\n\n");
+        System.out.println("===============================================\n");
 
     } // attack()
 
     private void panic(SpiderNode spider){
-        System.out.println("Panic!");
+        System.out.println("===============================================");
+        System.out.println("Starting to Panic!");
 
         // flag spider as in combat
         spider.setInCombat(true);
@@ -266,6 +268,9 @@ public class PlayerNode extends Node {
 
         // 50% chance to take damage
         if(rand.nextInt(100) > 49){
+
+            System.out.println("Took Damage While Panicking!");
+            System.out.println("Player Health: " + getHealth());
 
             // take small damage
             decreaseHealth(10);
@@ -281,13 +286,16 @@ public class PlayerNode extends Node {
 
         } // if
 
+        System.out.println("===============================================");
+
         // go into attack
         attack(spider);
 
     } // panic()
 
     private void heal(SpiderNode spider){
-        System.out.println("Heal!");
+        System.out.println("===============================================");
+        System.out.println("Trying to Heal!");
 
         // flag spider as in combat
         spider.setInCombat(true);
@@ -312,9 +320,12 @@ public class PlayerNode extends Node {
             // flag self as in combat
             this.inCombat = false;
 
+            System.out.println("===============================================");
+
         } else {
 
             System.out.println("Heal Failed!");
+            System.out.println("===============================================");
 
             // failed, attack
             attack(spider);
@@ -323,7 +334,8 @@ public class PlayerNode extends Node {
     } // heal()
 
     private void runAway(SpiderNode spider){
-        System.out.println("Run Away!");
+        System.out.println("===============================================");
+        System.out.println("Trying to Run Away!");
 
         // flag spider as in combat
         spider.setInCombat(true);
@@ -331,14 +343,30 @@ public class PlayerNode extends Node {
         // flag self as in combat
         this.inCombat = true;
 
-        // try and flee
-        flee(spider);
+        // 50% chance to heal
+        if(rand.nextInt(100) > 49) {
 
-        // flag spider as not in combat
-        spider.setInCombat(false);
+            System.out.println("Running Away!");
 
-        // flag self as not in combat
-        this.inCombat = false;
+            // try and flee
+            flee(spider);
+
+            // flag spider as not in combat
+            spider.setInCombat(false);
+
+            // flag self as not in combat
+            this.inCombat = false;
+
+            System.out.println("===============================================");
+
+        } else { // run failed!
+
+            System.out.println("Running Away Failed!");
+            System.out.println("===============================================");
+
+            // attack!
+            attack(spider);
+        }
 
     } // runAway()
 
