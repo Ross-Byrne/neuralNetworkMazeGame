@@ -78,7 +78,20 @@ public class PlayerNode extends Node {
             // get enemy status
             String enemyStat = enemyStatusClassifier.getWinningMembership("enemyStatus");
 
-            System.out.println(enemyStat);
+            // get enemy status
+            switch (enemyStat){
+                case "ok":
+                    enemyStatus = 0;
+                    break;
+                case "risky":
+                    enemyStatus = 0.5;
+                    break;
+                case "tooMany":
+                    enemyStatus = 1;
+                    break;
+            } // switch
+
+            System.out.println(enemyStat + " = " + enemyStatus);
 
             // get sword status
             if(isSword())
@@ -89,13 +102,12 @@ public class PlayerNode extends Node {
                 bombStatus = 1;
 
             // get combat decision
-            combatNet.action(healthStatus, swordStatus, bombStatus, 0);
+            combatNet.action(healthStatus, swordStatus, bombStatus, enemyStatus);
 
         }catch (Exception ex){
 
         } // try
-
-
+        
     } // startCombat()
 
     public int getHealth() {
