@@ -111,7 +111,7 @@ public class SpiderNode extends Node {
 
                 // if not returned, didn't have next move
                 // move randomly instead
-                randomMove();
+                //randomMove();
 
                 // reset next move
                 nextMove = null;
@@ -173,6 +173,38 @@ public class SpiderNode extends Node {
         } // synchronized()
 
     } // randomMove()
+
+    public void flee(Node enemy){
+
+        Node[] adjacentNodes = adjacentNodes(maze);
+        Node move = null;
+        int lowestHeurstic=1001;
+
+
+
+        for (Node n : adjacentNodes) {
+
+            //System.out.println(n.getHeuristic(enemy));
+
+            if(n.getHeuristic(enemy)<lowestHeurstic){
+                move=n;
+            }
+
+            System.out.println(lowestHeurstic);
+
+
+
+            // check that the node is empty space
+            //if (n.getId() == -1 && !n.equals(lastNode)&& n.getId()!=5) {
+
+                // add node to list of available nodes
+
+            //} // if
+        } // for
+
+        nextMove=move;
+
+    }
 
     private void swapNodes(Node x, Node y){
 
