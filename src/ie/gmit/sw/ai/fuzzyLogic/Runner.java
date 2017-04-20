@@ -30,6 +30,9 @@ public class Runner {
 
         //JFuzzyChart.get().chart(injuries, injuries.getDefuzzifier(), true);
         System.out.println("Injuries: " + injuries.defuzzify());
+
+        FuzzyHealthClassifier fuzzyHealth = new FuzzyHealthClassifier();
+
     }
 }
 
