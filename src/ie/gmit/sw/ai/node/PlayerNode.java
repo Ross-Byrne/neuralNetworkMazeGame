@@ -58,6 +58,7 @@ public class PlayerNode extends Node {
                     if(getHealth() <= 0){
                         // player is dead
                         isDead = true;
+                        
                         System.out.println("\n===============================================");
                         System.out.println("Player is Dead!");
                         System.out.println("===============================================\n");
