@@ -117,7 +117,7 @@ public class PlayerNode extends Node {
             // get number of enemies
             setNoOfEnemies(depthLimitedDFSTraverser.traverseForEnemies(maze, maze[getRow()][getCol()], 4).size());
 
-            System.out.println("Number of enemies: " + getNoOfEnemies());
+            System.out.println("Enemies Nearby: " + getNoOfEnemies());
 
             // set health in health classifier
             healthClassifier.setInputVariable("health", getHealth());
