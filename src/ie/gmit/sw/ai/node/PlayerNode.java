@@ -6,6 +6,7 @@ import ie.gmit.sw.ai.neuralNetwork.CombatDecisionNN;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.*;
 
 /**
@@ -28,6 +29,8 @@ public class PlayerNode extends Node {
     private CombatDecisionNN combatNet = null;
     private FuzzyHealthClassifier healthClassifier = null;
     private FuzzyEnemyStatusClassifier enemyStatusClassifier = null;
+    private Random rand = new Random();
+    public boolean isDead = false;
 
     public PlayerNode(int row, int col, Node[][] maze) {
 
@@ -50,6 +53,15 @@ public class PlayerNode extends Node {
 
             while (true) {
                 try {
+
+                    // check that player is dead
+                    if(getHealth() <= 0){
+                        // player is dead
+                        isDead = true;
+                        System.out.println("\n===============================================");
+                        System.out.println("Player is Dead!");
+                        System.out.println("===============================================\n");
+                    } // if
 
                     // sleep thread to simulate a movement pace
                     Thread.sleep(movementSpeed);
@@ -246,24 +258,87 @@ public class PlayerNode extends Node {
     private void panic(SpiderNode spider){
         System.out.println("Panic!");
 
+        // flag spider as in combat
+        spider.setInCombat(true);
+
+        // flag self as in combat
+        this.inCombat = true;
+
+        // 50% chance to take damage
+        if(rand.nextInt(100) > 49){
+
+            // take small damage
+            decreaseHealth(10);
+
+            // check that player is dead
+            if(getHealth() <= 0){
+                // player is dead
+                isDead = true;
+                System.out.println("\n===============================================");
+                System.out.println("Player is Dead!");
+                System.out.println("===============================================\n");
+            } // if
+
+        } // if
+
+        // go into attack
+        attack(spider);
+
     } // panic()
 
     private void heal(SpiderNode spider){
         System.out.println("Heal!");
 
-        // try and flee
-        flee(spider);
+        // flag spider as in combat
+        spider.setInCombat(true);
 
-        // heal
-        increaseHealth(10);
+        // flag self as in combat
+        this.inCombat = true;
+
+        // 50% chance to heal
+        if(rand.nextInt(100) > 49) {
+
+            System.out.println("Healing!");
+
+            // try and flee
+            flee(spider);
+
+            // heal
+            increaseHealth(10);
+
+            // flag spider as in combat
+            spider.setInCombat(false);
+
+            // flag self as in combat
+            this.inCombat = false;
+
+        } else {
+
+            System.out.println("Heal Failed!");
+
+            // failed, attack
+            attack(spider);
+        } // if
 
     } // heal()
 
     private void runAway(SpiderNode spider){
         System.out.println("Run Away!");
 
+        // flag spider as in combat
+        spider.setInCombat(true);
+
+        // flag self as in combat
+        this.inCombat = true;
+
         // try and flee
         flee(spider);
+
+        // flag spider as not in combat
+        spider.setInCombat(false);
+
+        // flag self as not in combat
+        this.inCombat = false;
 
     } // runAway()
 
@@ -299,22 +374,26 @@ public class PlayerNode extends Node {
 
         Node[] adjacentNodes = adjacentNodes(maze);
         Node move = null;
-        int lowestHeurstic=1001;
+        int lowestHeurstic=0;
 
         for (Node n : adjacentNodes) {
 
-            if(n.getHeuristic(enemy)<lowestHeurstic){
+            if(n.getHeuristic(enemy)>lowestHeurstic){
                 move=n;
             }
 
         } // for
 
+        // save next move
         nextMove=move;
 
-        // move the player
-        swapNodes(this, nextMove);
+        // if there is a place to move
+        if(nextMove != null) {
+            // move the player
+            swapNodes(this, nextMove);
+        } // if
 
-    }
+    } // flee()
 
     private void swapNodes(Node x, Node y){
 
