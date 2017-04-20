@@ -1,5 +1,6 @@
 package ie.gmit.sw.ai.node;
 
+import ie.gmit.sw.ai.fuzzyLogic.FuzzyEnemyStatusClassifier;
 import ie.gmit.sw.ai.fuzzyLogic.FuzzyHealthClassifier;
 import ie.gmit.sw.ai.neuralNetwork.CombatDecisionNN;
 
@@ -10,9 +11,10 @@ public class PlayerNode extends Node {
     private int health = 100;
     private int bombs;
     private boolean sword;
-    private int noOfEnemies;
+    private int noOfEnemies = 0;
     private CombatDecisionNN combatNet = null;
-    private FuzzyHealthClassifier fuzzyHealthClassifier = null;
+    private FuzzyHealthClassifier healthClassifier = null;
+    private FuzzyEnemyStatusClassifier enemyStatusClassifier = null;
 
     public PlayerNode(int row, int col, int id) {
 
@@ -20,7 +22,8 @@ public class PlayerNode extends Node {
 
         // instantiate neural network that decides whether to fight, panic, heal or run away
         combatNet = new CombatDecisionNN();
-        fuzzyHealthClassifier = new FuzzyHealthClassifier();
+        healthClassifier = new FuzzyHealthClassifier();
+        enemyStatusClassifier = new FuzzyEnemyStatusClassifier();
 
         startCombat(null);
 
@@ -49,10 +52,10 @@ public class PlayerNode extends Node {
             double enemyStatus = 0;
 
             // set health in health classifier
-            fuzzyHealthClassifier.setInputVariable("health", getHealth());
+            healthClassifier.setInputVariable("health", getHealth());
 
             // get the health stat from fuzzy health classifier
-            String injuriesStatus = fuzzyHealthClassifier.getWinningMembership("injuries");
+            String injuriesStatus = healthClassifier.getWinningMembership("injuries");
 
             // get health status
             switch (injuriesStatus){
@@ -69,12 +72,17 @@ public class PlayerNode extends Node {
 
             System.out.println(injuriesStatus + " = " + healthStatus);
 
+            // set the number of enemies in fuzzy logic classifier
+            enemyStatusClassifier.setInputVariable("enemies", getNoOfEnemies());
+
             // get enemy status
+            String enemyStat = enemyStatusClassifier.getWinningMembership("enemyStatus");
+
+            System.out.println(enemyStat);
 
             // get sword status
             if(isSword())
                 swordStatus = 1;
-
 
             // get bomb status
             if(getBombs() > 0)

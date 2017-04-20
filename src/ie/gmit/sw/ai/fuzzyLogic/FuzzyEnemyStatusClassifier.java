@@ -2,6 +2,7 @@ package ie.gmit.sw.ai.fuzzyLogic;
 
 import net.sourceforge.jFuzzyLogic.FIS;
 import net.sourceforge.jFuzzyLogic.FunctionBlock;
+import net.sourceforge.jFuzzyLogic.plot.JFuzzyChart;
 import net.sourceforge.jFuzzyLogic.rule.LinguisticTerm;
 import net.sourceforge.jFuzzyLogic.rule.Variable;
 
@@ -10,20 +11,20 @@ import java.util.List;
 /**
  * Created by Ross Byrne on 20/04/17.
  *
- * A Fuzzy logic classifier, that classifies the player's
- * Health between 3 categories, Low, normal and high.
+ * A Fuzzy logic classifier, that classifies the enemy status
+ * between 3 categories, ok, risky and tooMany.
  * This classification is then passed to the player's combat neural network
  * which decides what happens in combat.
  */
-public class FuzzyHealthClassifier {
+public class FuzzyEnemyStatusClassifier {
 
     private FIS fis = null;
     private FunctionBlock fb = null;
 
-    public FuzzyHealthClassifier(){
+    public FuzzyEnemyStatusClassifier(){
 
         // setup the fuzzy logic system
-        fis = FIS.load("./fcl/health.fcl", true);
+        fis = FIS.load("./fcl/enemies.fcl", true);
         fb = fis.getFunctionBlock("Project");
 
     }
@@ -31,8 +32,8 @@ public class FuzzyHealthClassifier {
     // sets the value for an input variable
     public void setInputVariable(String vName, double value) throws Exception {
 
-        // set the value
-        fis.setVariable(vName, value);
+        // set the value (multiply value by 10 to normalise it)
+        fis.setVariable(vName, (value * 10));
 
     } // setInputVariable()
 
