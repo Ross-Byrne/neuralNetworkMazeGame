@@ -294,7 +294,6 @@ public class PlayerNode extends Node {
                 System.out.println("Player is Dead!");
                 System.out.println("===============================================\n");
             } // if
-
         } // if
 
         System.out.println("===============================================");
