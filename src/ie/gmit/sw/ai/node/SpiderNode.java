@@ -190,14 +190,14 @@ public class SpiderNode extends Node {
                 //System.out.println("Black Spider");
 
                 //transverse from sprites location using Depth Limited DFS
-                //dlDFS.traverse(maze, maze[row][col]);
+                dlDFS.traverse(maze, maze[row][col]);
                 break;
 
             case 7:
                 //System.out.println("Blue Spider");
 
                 //transverse from sprites location using bestFirstTraverser
-                bestFirst.traverse(maze, maze[row][col]);
+                //bestFirst.traverse(maze, maze[row][col]);
                 //System.out.println("Finished travversing");
                 break;
 
@@ -205,28 +205,28 @@ public class SpiderNode extends Node {
                 //System.out.println("Brown Spider");
 
                 //transverse from sprites location using Depth Limited DFS
-                //dlDFS.traverse(maze, maze[row][col]);
+                dlDFS.traverse(maze, maze[row][col]);
                 break;
 
             case 9:
                 //System.out.println("Green Spider");
 
                 //transverse from sprites location using Depth Limited DFS
-                //dlDFS.traverse(maze, maze[row][col]);
+                dlDFS.traverse(maze, maze[row][col]);
                 break;
 
             case 10:
                 //System.out.println("Grey Spider");
 
                 //transverse from sprites location using Depth Limited DFS
-                //dlDFS.traverse(maze, maze[row][col]);
+                dlDFS.traverse(maze, maze[row][col]);
                 break;
 
             case 11:
                 //System.out.println("Orange Spider");
 
                 //transverse from sprites location using Depth Limited DFS
-                //dlDFS.traverse(maze, maze[row][col]);
+                dlDFS.traverse(maze, maze[row][col]);
                 break;
 
             case 12:
@@ -240,7 +240,7 @@ public class SpiderNode extends Node {
                 //System.out.println("Yellow Spider");
 
                 //transverse from sprites location using Depth Limited DFS
-                //dlDFS.traverse(maze, maze[row][col]);
+                dlDFS.traverse(maze, maze[row][col]);
                 break;
             default:
                 System.out.println("Not a Spider");
@@ -250,12 +250,14 @@ public class SpiderNode extends Node {
         }
 
         // get the next node to move to
-        nextMove = bestFirst.getNextNode();
+        nextMove = dlDFS.getNextNode();
 
         // flag as having a next move
         if(nextMove != null){
+            //use best first to find best path
+            bestFirst.traverse(maze, maze[row][col]);
+            nextMove = bestFirst.getNextNode();
             hasNextMove = true;
-            System.out.println("Moving towards player");
         } else {
             hasNextMove = false;
             //System.out.println("has no next Move");
