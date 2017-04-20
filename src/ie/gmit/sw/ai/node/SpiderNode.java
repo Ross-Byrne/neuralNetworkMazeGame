@@ -278,9 +278,9 @@ public class SpiderNode extends Node {
 
 
                 //checks how many enemies //move to playerNode class
-                PlayerDepthLimitedDFSTraverser enemy = new PlayerDepthLimitedDFSTraverser(10);
-                enemy.traverseForEnemies(maze, maze[row][col]);
-                //System.out.println("Number of Enemies:  "+enemy.getEnemies());
+                //PlayerDepthLimitedDFSTraverser enemy = new PlayerDepthLimitedDFSTraverser();
+                //enemy.traverseForEnemies(maze, maze[row][col], 10);
+                //System.out.println("Number of Enemies:  "+enemy.getEnemyCount());
 
                 break;
 

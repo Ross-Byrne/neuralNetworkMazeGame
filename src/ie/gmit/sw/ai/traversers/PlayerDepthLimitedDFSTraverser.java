@@ -1,6 +1,8 @@
 package ie.gmit.sw.ai.traversers;
 
 import ie.gmit.sw.ai.node.Node;
+import ie.gmit.sw.ai.node.SpiderNode;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -9,7 +11,7 @@ import java.util.Set;
     Adapted from AI-MAZE_ALGOS project from moodle
  */
 
-public class PlayerDepthLimitedDFSTraverser extends DepthLimitedDFSTraversator {
+public class PlayerDepthLimitedDFSTraverser {
     private Node[][] maze;
     private int limit;
     private boolean keepRunning = true;
@@ -17,15 +19,19 @@ public class PlayerDepthLimitedDFSTraverser extends DepthLimitedDFSTraversator {
     private Node start;
     private Set<Node> isVisited = null;
     private LinkedList<Node> pathToGoal = null;
-    private Set<Node> enemies = null;
+    private Set<Node> enemies = new HashSet<>();
 
-    public PlayerDepthLimitedDFSTraverser(int limit){
-        super(limit,new Node(0,0,0));
+    public PlayerDepthLimitedDFSTraverser(){
         this.maze = maze;
-        this.limit= limit;
     }
 
-    public void traverseForEnemies(Node[][] maze, Node node) {
+    // returns set of nodes which are near by enemies
+    public Set<Node> traverseForEnemies(Node[][] maze, Node node, int limit) {
+
+        visitCount = 0;
+
+        // set the limit
+        this.limit = limit;
 
         // create hash set to track enemies
         enemies = new HashSet<>();
@@ -38,14 +44,18 @@ public class PlayerDepthLimitedDFSTraverser extends DepthLimitedDFSTraversator {
         isVisited = new HashSet<>();
 
         // start DFS
-        countEnemiesdfs(start,limit);
+        countEnemiesdfs(start,0);
 
         // clear visited nodes
         isVisited = null;
+
+        System.out.println("Visited Nodes: " + visitCount);
+
+        return enemies;
     }
 
     //returns the number of found enemies
-    public int getEnemies(){
+    public int getEnemyCount(){
         return this.enemies.size();
 
     } // getNextNode()
@@ -59,8 +69,8 @@ public class PlayerDepthLimitedDFSTraverser extends DepthLimitedDFSTraversator {
         isVisited.add(node);
         visitCount++;
 
-        // if node is hostile
-        if (node.isHostile()) {
+        // if node is spider
+        if (node instanceof SpiderNode) {
 
             // save enemy
             enemies.add(node);
@@ -71,7 +81,7 @@ public class PlayerDepthLimitedDFSTraverser extends DepthLimitedDFSTraversator {
         Node[] children = node.adjacentNodes(maze);
         for (int i = 0; i < children.length; i++) {
 
-            // only visit children on node if theyt havn't been visited
+            // only visit children on node if they haven't been visited
             if (children[i] != null && !isVisited.contains(children[i])){
 
                 // visit child node
