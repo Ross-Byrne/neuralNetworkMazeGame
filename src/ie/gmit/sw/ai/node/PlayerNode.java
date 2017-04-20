@@ -4,6 +4,10 @@ import ie.gmit.sw.ai.fuzzyLogic.FuzzyEnemyStatusClassifier;
 import ie.gmit.sw.ai.fuzzyLogic.FuzzyHealthClassifier;
 import ie.gmit.sw.ai.neuralNetwork.CombatDecisionNN;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
+
 /**
  * Created by Martin Coleman on 19/04/2017.
  */
@@ -12,15 +16,25 @@ public class PlayerNode extends Node {
     private int bombs;
     private int swords;
     private int noOfEnemies;
+    private int damage = 10;
+    private int bombDamage = 20;
+    private int swordDamage = 10;
+    private Node[][] maze = null;
+    private Node nextMove = null;
+    private boolean hasNextMove = false;
+    private boolean inCombat=false;
+    private long movementSpeed = 3000;
+    private ExecutorService executor = Executors.newFixedThreadPool(1);
     private CombatDecisionNN combatNet = null;
     private FuzzyHealthClassifier healthClassifier = null;
     private FuzzyEnemyStatusClassifier enemyStatusClassifier = null;
 
-    public PlayerNode(int row, int col, int id) {
+    public PlayerNode(int row, int col, Node[][] maze) {
 
-        super(row, col, id);
+        super(row, col, 5);
 
         //Init Variables
+        this.maze = maze;
         this.health=100;
         this.bombs=0;
         this.swords=0;
@@ -31,8 +45,29 @@ public class PlayerNode extends Node {
         healthClassifier = new FuzzyHealthClassifier();
         enemyStatusClassifier = new FuzzyEnemyStatusClassifier();
 
-        // just to test
-        startCombat(null);
+        // start player thread
+        executor.submit(() -> {
+
+            while (true) {
+                try {
+
+                    // sleep thread to simulate a movement pace
+                    Thread.sleep(movementSpeed);
+
+                    // don't do anything if in combat
+                    if(!inCombat) {
+
+                        // check for enemies right next to the player
+                        checkForEnemies();
+
+                    } // if
+
+                } catch (Exception ex) {
+
+                } // try catch
+            } // while
+
+        });
 
     }
 
@@ -114,16 +149,16 @@ public class PlayerNode extends Node {
             // execute decision
             switch (result){
                 case 1: // attack
-                    System.out.println("Attack!");
+                    attack(spider);
                     break;
-                case 2:
-                    System.out.println("Panic!");
+                case 2: // panic
+                    panic();
                     break;
-                case 3:
-                    System.out.println("Heal!");
+                case 3: // heal
+                    heal();
                     break;
-                    default:
-                        System.out.println("Run Away!");
+                default: // run away
+                    runAway();
 
             } // switch
 
@@ -132,6 +167,72 @@ public class PlayerNode extends Node {
         } // try
 
     } // startCombat()
+
+    private void attack(SpiderNode spider){
+        System.out.println("Attack!");
+
+        // flag spider as in combat
+        spider.setInCombat(true);
+
+        // flag self as in combat
+        this.inCombat = true;
+
+        // do damage to spider
+        int spiderHealth = spider.getHealth();
+
+        // check if dead
+        if(spiderHealth <= 0){
+            // spider is dead
+
+            // not in combat
+            inCombat = false;
+
+            // remove spider
+            maze[spider.getRow()][spider.getCol()] = new Node(spider.getRow(), spider.getCol(), -1);
+        } // if
+    } // attack()
+
+    private void panic(){
+        System.out.println("Panic!");
+
+    }
+
+    private void heal(){
+        System.out.println("Heal!");
+    }
+
+    private void runAway(){
+        System.out.println("Run Away!");
+
+    }
+
+    // checks for enemies that are right next to the player
+    private void checkForEnemies(){
+
+        Node[] adjacentNodes = null;
+        List<Node> enemies = new ArrayList<>();
+
+        // get the spiders adjacent nodes
+        adjacentNodes = adjacentNodes(maze);
+
+        for (Node n : adjacentNodes) {
+
+            // check that the node is an enemy
+            if (n.getId() > 5) {
+
+                // add node to list of enemies
+                enemies.add(n);
+            } // if
+        } // if
+
+        // check if there are enemies
+        if(enemies.size() > 0){
+
+            // start combat with first enemy
+            startCombat((SpiderNode) enemies.get(0));
+        } // if
+
+    } // checkForEnemies()
 
     public int getHealth() {
         return health;

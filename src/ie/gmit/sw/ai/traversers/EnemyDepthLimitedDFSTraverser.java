@@ -28,6 +28,7 @@ public class EnemyDepthLimitedDFSTraverser  extends DepthLimitedDFSTraversator {
 
     public void traverseForEnemies(Node[][] maze, Node node) {
 
+        enemies = 0;
         pathToGoal = new LinkedList<>();
         this.maze = maze;
 

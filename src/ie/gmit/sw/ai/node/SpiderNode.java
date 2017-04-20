@@ -42,7 +42,6 @@ public class SpiderNode extends Node {
         this.health=health;
 
         // start moving the spider
-        // run()
         executor.submit(() -> {
 
             while (true) {
@@ -51,15 +50,19 @@ public class SpiderNode extends Node {
                     // sleep thread to simulate a movement pace
                     Thread.sleep(movementSpeed);
 
-                    //search
-                    search(getRow(), getCol());
+                    // don't do anything
+                    if(!inCombat) {
 
-                    // start moving the spider
-                    if(hasNextMove){        // if spider has next move
-                        moveToNextNode();   // move to next node
-                    } else {                // otherwise
-                        randomMove();       // move randomly
-                    }
+                        //search
+                        search(getRow(), getCol());
+
+                        // start moving the spider
+                        if (hasNextMove) {        // if spider has next move
+                            moveToNextNode();   // move to next node
+                        } else {                // otherwise
+                            randomMove();       // move randomly
+                        }
+                    } // if
 
                 } catch (Exception ex) {
 
@@ -293,8 +296,12 @@ public class SpiderNode extends Node {
 
     }
 
+    public boolean isInCombat() {
+        return inCombat;
+    }
 
-
-
+    public void setInCombat(boolean inCombat) {
+        this.inCombat = inCombat;
+    }
 } // class
 
