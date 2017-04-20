@@ -2,6 +2,7 @@ package ie.gmit.sw.ai.node;
 
 import ie.gmit.sw.ai.traversers.BestFirstTraversator;
 import ie.gmit.sw.ai.traversers.DepthLimitedDFSTraversator;
+import ie.gmit.sw.ai.traversers.EnemyDepthLimitedDFSTraverser;
 import ie.gmit.sw.ai.traversers.Traversator;
 
 import java.util.*;
@@ -23,7 +24,6 @@ public class SpiderNode extends Node {
     private int id;
     private Node nextMove = null;
     private boolean hasNextMove = false;
-
 
     public SpiderNode(int row, int col, int id, Object lock, Node[][] maze ,PlayerNode player) {
 
@@ -234,6 +234,13 @@ public class SpiderNode extends Node {
 
                 //transverse from sprites location using Depth Limited DFS
                 //dlDFS.traverse(maze, maze[row][col]);
+
+
+                //checks how many enemies //move to playerNode class
+                EnemyDepthLimitedDFSTraverser enemy = new EnemyDepthLimitedDFSTraverser(10);
+                enemy.traverseForEnemies(maze, maze[row][col]);
+                //System.out.println("Number of Enemies:  "+enemy.getEnemies());
+
                 break;
 
             case 13:
