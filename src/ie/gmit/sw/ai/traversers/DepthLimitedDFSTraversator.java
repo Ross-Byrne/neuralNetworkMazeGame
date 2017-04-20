@@ -46,8 +46,8 @@ public class DepthLimitedDFSTraversator implements Traversator{
 		// clear visited nodes
 		isVisited = null;
 
-		if(pathToGoal.size() > 0)
-            System.out.println("Path size: " + pathToGoal.size());
+		//if(pathToGoal.size() > 0)
+            //System.out.println("Path size: " + pathToGoal.size());
     }
 
     // gets the next node in the path
@@ -78,9 +78,9 @@ public class DepthLimitedDFSTraversator implements Traversator{
 		if (node.equals(goal)){
 
 		    pathToGoal.addFirst(node);
-            System.out.println("Goal Found by: " + start.hashCode());
+            //System.out.println("Goal Found by: " + start.hashCode());
             time = System.currentTimeMillis() - time; //Stop the clock
-	        TraversatorStats.printStats(node, time, visitCount);
+	        //TraversatorStats.printStats(node, time, visitCount);
 	        keepRunning = false;
 			return true;
 		}
