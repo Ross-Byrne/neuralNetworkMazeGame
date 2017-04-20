@@ -117,19 +117,19 @@ public class Maze {
 					switch (feature){
                         case 6:
                             //Black Spider - Common, Weaker attack
-                            maze[row][col] = new SpiderNode(row, col, feature, lock, maze, getPlayer(),10);
+                            maze[row][col] = new SpiderNode(row, col, feature, lock, maze, getPlayer(),15);
                             maze[row][col].setHostile(true);
                             break;
 
                         case 7:
                             //Blue Spider - Strong, hunt the player, only a few in maze
-                            maze[row][col] = new SpiderNode(row, col, feature, lock, maze, getPlayer(),50);
+                            maze[row][col] = new SpiderNode(row, col, feature, lock, maze, getPlayer(),55);
                             maze[row][col].setHostile(true);
                             break;
 
                         case 8:
                             //Brown Spider - run away from player
-                            maze[row][col] = new SpiderNode(row, col, feature, lock, maze, getPlayer(),10);
+                            maze[row][col] = new SpiderNode(row, col, feature, lock, maze, getPlayer(),15);
                             maze[row][col].setHostile(false);
                             break;
 
@@ -141,25 +141,25 @@ public class Maze {
 
                         case 10:
                             //Grey Spider - passive wont attack
-                            maze[row][col] = new SpiderNode(row, col, feature, lock, maze, getPlayer(),10);
+                            maze[row][col] = new SpiderNode(row, col, feature, lock, maze, getPlayer(),15);
                             maze[row][col].setHostile(false);
                             break;
 
                         case 11:
                             //Orange Spider - attack within radius
-                            maze[row][col] = new SpiderNode(row, col, feature, lock, maze, getPlayer(),20);
+                            maze[row][col] = new SpiderNode(row, col, feature, lock, maze, getPlayer(),25);
                             maze[row][col].setHostile(true);
                             break;
 
                         case 12:
                             //Red Spider - Boss, only one, strongest spider
-                            maze[row][col] = new SpiderNode(row, col, feature, lock, maze, getPlayer(),100);
+                            maze[row][col] = new SpiderNode(row, col, feature, lock, maze, getPlayer(),155);
                             maze[row][col].setHostile(true);
                             break;
 
                         case 13:
                             //Yellow Spider - Common, wont attack until provoked then all turn hostile
-                            maze[row][col] = new SpiderNode(row, col, feature, lock, maze, getPlayer(),20);
+                            maze[row][col] = new SpiderNode(row, col, feature, lock, maze, getPlayer(),25);
                             maze[row][col].setHostile(false);
                             break;
                         default:
