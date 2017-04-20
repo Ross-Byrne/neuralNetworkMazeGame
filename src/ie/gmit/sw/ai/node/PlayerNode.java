@@ -112,8 +112,6 @@ public class PlayerNode extends Node {
                     break;
             } // switch
 
-            System.out.println(injuriesStatus + " = " + healthStatus);
-
             // set the number of enemies in fuzzy logic classifier
             enemyStatusClassifier.setInputVariable("enemies", getNoOfEnemies());
 
@@ -133,8 +131,6 @@ public class PlayerNode extends Node {
                     break;
             } // switch
 
-            System.out.println(enemyStat + " = " + enemyStatus);
-
             // get sword status
             if(getSwords() > 0)
                 swordStatus = 1;
@@ -145,6 +141,16 @@ public class PlayerNode extends Node {
 
             // get combat decision
             int result = combatNet.action(healthStatus, swordStatus, bombStatus, enemyStatus);
+
+            System.out.println("======================================================================");
+            System.out.println("Stats");
+            System.out.println("HealthStat: " + healthStatus);
+            System.out.println("SwordStat: " + swordStatus);
+            System.out.println("BombStat: " + bombStatus);
+            System.out.println("enemyStatus: " + enemyStatus);
+            System.out.println("Actual Health: " + getHealth());
+
+            System.out.println("======================================================================");
 
             // execute decision
             switch (result){
@@ -177,8 +183,33 @@ public class PlayerNode extends Node {
         // flag self as in combat
         this.inCombat = true;
 
-        // do damage to spider
+        // get spider health
         int spiderHealth = spider.getHealth();
+
+        System.out.println("Spider Health: " + spiderHealth);
+        System.out.println("Player Health: " + getHealth());
+        System.out.println("Player Damage: " + getDamage());
+
+        // use bomb if have one and can't one hit spider
+        if(spiderHealth > getDamage() && getBombs() > 0){
+
+            // use bomb and normal attack
+            spider.decreaseHealth(getDamage() + bombDamage);
+
+            // you have used a bomb
+            decreaseBombs();
+
+            System.out.println("Player Use A Bomb");
+
+        } else {
+
+            // use normal attack
+            spider.decreaseHealth(getDamage());
+
+        } // if
+
+        // check spiders health
+        spiderHealth = spider.getHealth();
 
         // check if dead
         if(spiderHealth <= 0){
@@ -189,7 +220,27 @@ public class PlayerNode extends Node {
 
             // remove spider
             maze[spider.getRow()][spider.getCol()] = new Node(spider.getRow(), spider.getCol(), -1);
+        } else {
+
+            System.out.println("Damage Taken: " + spiderHealth);
+
+            // player takes remaining spider health as damage
+            decreaseHealth(spiderHealth);
+
+            // spider dies
+
+            // not in combat
+            inCombat = false;
+
+            // remove spider
+            maze[spider.getRow()][spider.getCol()] = new Node(spider.getRow(), spider.getCol(), -1);
+
         } // if
+
+        System.out.println("Player's Health: " + getHealth());
+
+        System.out.println("======================================================================\n\n\n");
+
     } // attack()
 
     private void panic(){
@@ -250,13 +301,16 @@ public class PlayerNode extends Node {
         return bombs;
     }
 
-    public void increaseBombs(int bombs) {
+    public void increaseBombs() {
         this.bombs += bombs;
     }
 
-    public void decreaseBombs(int bombs) {
+    public void decreaseBombs() {
 
         this.bombs -= bombs;
+
+        if(bombs < 0)
+            bombs = 0;
     }
 
     public int getSwords() {
@@ -282,4 +336,16 @@ public class PlayerNode extends Node {
     public void decreaseNoOfEnemies(int noOfEnemies) {
         this.noOfEnemies -= noOfEnemies;
     }
+
+    // gets the players damage
+    // includes sword if player has one
+    public int getDamage(){
+
+        int totalDamage = this.damage;
+
+        if(swords > 0)
+            totalDamage += this.swordDamage;
+
+        return totalDamage;
+    } // getDamage()
 }
