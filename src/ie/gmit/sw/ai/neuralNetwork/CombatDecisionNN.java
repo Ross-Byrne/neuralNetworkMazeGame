@@ -54,7 +54,7 @@ public class CombatDecisionNN {
 
             // No Sword, No Bomb
             { 1, 0, 0, 0}, { 1, 0, 0, 0 }, { 0, 0, 1, 0 }, // full health, enemies covered
-            { 0, 0, 1, 0 }, { 0, 1, 0, 0 }, { 0, 0, 0, 1 }, // minior injuries, enemies covered
+            { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 }, // minior injuries, enemies covered
             { 0, 0, 1, 0 }, { 0, 0, 0, 1 }, { 0, 0, 0, 1 }, // serious injuries, enemies covered
 
             // Sword, No Bomb

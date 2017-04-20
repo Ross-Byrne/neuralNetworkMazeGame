@@ -6,6 +6,7 @@ import ie.gmit.sw.ai.neuralNetwork.CombatDecisionNN;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.*;
 
 /**
@@ -28,6 +29,8 @@ public class PlayerNode extends Node {
     private CombatDecisionNN combatNet = null;
     private FuzzyHealthClassifier healthClassifier = null;
     private FuzzyEnemyStatusClassifier enemyStatusClassifier = null;
+    private Random rand = new Random();
+    public boolean isDead = false;
 
     public PlayerNode(int row, int col, Node[][] maze) {
 
@@ -50,6 +53,15 @@ public class PlayerNode extends Node {
 
             while (true) {
                 try {
+
+                    // check that player is dead
+                    if(getHealth() <= 0){
+                        // player is dead
+                        isDead = true;
+                        System.out.println("\n===============================================");
+                        System.out.println("Player is Dead!");
+                        System.out.println("===============================================\n");
+                    } // if
 
                     // sleep thread to simulate a movement pace
                     Thread.sleep(movementSpeed);
@@ -142,7 +154,7 @@ public class PlayerNode extends Node {
             // get combat decision
             int result = combatNet.action(healthStatus, swordStatus, bombStatus, enemyStatus);
 
-            System.out.println("======================================================================");
+            System.out.println("\n===============================================");
             System.out.println("Stats");
             System.out.println("HealthStat: " + healthStatus);
             System.out.println("SwordStat: " + swordStatus);
@@ -150,7 +162,7 @@ public class PlayerNode extends Node {
             System.out.println("enemyStatus: " + enemyStatus);
             System.out.println("Actual Health: " + getHealth());
 
-            System.out.println("======================================================================");
+            System.out.println("===============================================");
 
             // execute decision
             switch (result){
@@ -175,7 +187,8 @@ public class PlayerNode extends Node {
     } // startCombat()
 
     private void attack(SpiderNode spider){
-        System.out.println("Attack!");
+        System.out.println("===============================================");
+        System.out.println("Attacking!");
 
         // flag spider as in combat
         spider.setInCombat(true);
@@ -244,31 +257,121 @@ public class PlayerNode extends Node {
 
         System.out.println("Player's Health: " + getHealth());
 
-        System.out.println("======================================================================\n\n\n");
+        System.out.println("===============================================\n");
 
     } // attack()
 
     private void panic(SpiderNode spider){
-        System.out.println("Panic!");
+        System.out.println("===============================================");
+        System.out.println("Starting to Panic!");
+
+        // flag spider as in combat
+        spider.setInCombat(true);
+
+        // flag self as in combat
+        this.inCombat = true;
+
+        // 50% chance to take damage
+        if(rand.nextInt(100) > 49){
+
+            System.out.println("Took Damage While Panicking!");
+            System.out.println("Player Health: " + getHealth());
+
+            // take small damage
+            decreaseHealth(10);
+
+            // check that player is dead
+            if(getHealth() <= 0){
+                // player is dead
+                isDead = true;
+                System.out.println("\n===============================================");
+                System.out.println("Player is Dead!");
+                System.out.println("===============================================\n");
+            } // if
+
+        } // if
+
+        System.out.println("===============================================");
+
+        // go into attack
+        attack(spider);
 
     } // panic()
 
     private void heal(SpiderNode spider){
-        System.out.println("Heal!");
+        System.out.println("===============================================");
+        System.out.println("Trying to Heal!");
 
-        // try and flee
-        flee(spider);
+        // flag spider as in combat
+        spider.setInCombat(true);
 
-        // heal
-        increaseHealth(10);
+        // flag self as in combat
+        this.inCombat = true;
+
+        // 50% chance to heal
+        if(rand.nextInt(100) > 49) {
+
+            System.out.println("Healing!");
+
+            // try and flee
+            flee(spider);
+
+            // heal
+            increaseHealth(10);
+
+            // flag spider as in combat
+            spider.setInCombat(false);
+
+            // flag self as in combat
+            this.inCombat = false;
+
+            System.out.println("===============================================");
+
+        } else {
+
+            System.out.println("Heal Failed!");
+            System.out.println("===============================================");
+
+            // failed, attack
+            attack(spider);
+        } // if
 
     } // heal()
 
     private void runAway(SpiderNode spider){
-        System.out.println("Run Away!");
+        System.out.println("===============================================");
+        System.out.println("Trying to Run Away!");
 
-        // try and flee
-        flee(spider);
+        // flag spider as in combat
+        spider.setInCombat(true);
+
+        // flag self as in combat
+        this.inCombat = true;
+
+        // 50% chance to heal
+        if(rand.nextInt(100) > 49) {
+
+            System.out.println("Running Away!");
+
+            // try and flee
+            flee(spider);
+
+            // flag spider as not in combat
+            spider.setInCombat(false);
+
+            // flag self as not in combat
+            this.inCombat = false;
+
+            System.out.println("===============================================");
+
+        } else { // run failed!
+
+            System.out.println("Running Away Failed!");
+            System.out.println("===============================================");
+
+            // attack!
+            attack(spider);
+        }
 
     } // runAway()
 
@@ -304,22 +407,26 @@ public class PlayerNode extends Node {
 
         Node[] adjacentNodes = adjacentNodes(maze);
         Node move = null;
-        int lowestHeurstic=1001;
+        int lowestHeurstic=0;
 
         for (Node n : adjacentNodes) {
 
-            if(n.getHeuristic(enemy)<lowestHeurstic){
+            if(n.getHeuristic(enemy)>lowestHeurstic){
                 move=n;
             }
 
         } // for
 
+        // save next move
         nextMove=move;
 
-        // move the player
-        swapNodes(this, nextMove);
+        // if there is a place to move
+        if(nextMove != null) {
+            // move the player
+            swapNodes(this, nextMove);
+        } // if
 
-    }
+    } // flee()
 
     private void swapNodes(Node x, Node y){
 

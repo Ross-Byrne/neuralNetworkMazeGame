@@ -181,11 +181,11 @@ public class SpiderNode extends Node {
 
         Node[] adjacentNodes = adjacentNodes(maze);
         Node move = null;
-        int lowestHeurstic=1001;
+        int lowestHeurstic=0;
 
         for (Node n : adjacentNodes) {
 
-            if(n.getHeuristic(enemy)<lowestHeurstic){
+            if(n.getHeuristic(enemy)>lowestHeurstic){
                 move=n;
             }
 
