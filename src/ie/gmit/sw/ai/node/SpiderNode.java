@@ -24,8 +24,12 @@ public class SpiderNode extends Node {
     private int id;
     private Node nextMove = null;
     private boolean hasNextMove = false;
+    private boolean inCombat=false;
 
-    public SpiderNode(int row, int col, int id, Object lock, Node[][] maze ,PlayerNode player) {
+    //Variables for spider
+    private int health;
+
+    public SpiderNode(int row, int col, int id, Object lock, Node[][] maze ,PlayerNode player,int health) {
 
         // setup constructor
         super(row, col, id);
@@ -35,6 +39,7 @@ public class SpiderNode extends Node {
         this.maze = maze;
         this.player = player;
         this.id = id;
+        this.health=health;
 
         // start moving the spider
         // run()
@@ -64,6 +69,22 @@ public class SpiderNode extends Node {
         });
 
     } // constructor
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void increaseHealth(int health) {
+        this.health += health;
+    }
+
+    public void decreaseHealth(int health) {
+        this.health -= health;
+    }
 
     private void moveToNextNode(){
 
