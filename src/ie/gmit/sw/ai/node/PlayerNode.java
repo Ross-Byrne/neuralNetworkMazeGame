@@ -190,6 +190,11 @@ public class PlayerNode extends Node {
         System.out.println("Player Health: " + getHealth());
         System.out.println("Player Damage: " + getDamage());
 
+        //green spider - Heal player
+        if(spider.getId()==9){
+            increaseHealth(20);
+        }
+
         // use bomb if have one and can't one hit spider
         if(spiderHealth > getDamage() && getBombs() > 0){
 
@@ -346,6 +351,10 @@ public class PlayerNode extends Node {
 
     public void increaseHealth(int health) {
         this.health += health;
+
+        if(this.health>100)
+            this.health=100;
+
     }
 
     public void decreaseHealth(int health) {
