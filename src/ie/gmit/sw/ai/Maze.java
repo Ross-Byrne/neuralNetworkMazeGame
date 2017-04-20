@@ -171,7 +171,7 @@ public class Maze {
 				else if(feature == 5) { // if player
 
 					//create the player node
-					player = new PlayerNode(row,col,5);
+					player = new PlayerNode(row,col,maze);
 
 					//set the player node
 					maze[row][col] = player;
