@@ -5,7 +5,6 @@ Taken from AI-MAZE_ALGOS project from moodle
  */
 
 import ie.gmit.sw.ai.node.*;
-
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;

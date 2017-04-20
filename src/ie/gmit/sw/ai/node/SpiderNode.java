@@ -74,7 +74,7 @@ public class SpiderNode extends Node {
                 for(Node n : adjacentNodes(maze)){
 
                     // check if next move is an adjacent node
-                    if(nextMove.equals(n)){
+                    if(nextMove.equals(n)&& n.getId()!=5){
 
                         // swap nodes to move
                         swapNodes(this, nextMove);
@@ -127,7 +127,7 @@ public class SpiderNode extends Node {
             for (Node n : adjacentNodes) {
 
                 // check that the node is empty space
-                if (n.getId() == -1 && !n.equals(lastNode)) {
+                if (n.getId() == -1 && !n.equals(lastNode)&& n.getId()!=5) {
 
                     // add node to list of available nodes
                     canMoveTo.add(n);
@@ -182,7 +182,7 @@ public class SpiderNode extends Node {
 
     private void search(int row, int col){
         Traversator dlDFS = new DepthLimitedDFSTraversator(10,player);
-        //Traversator bestFirst = new BestFirstTraversator(player);
+        Traversator bestFirst = new BestFirstTraversator(player);
 
         switch(id){
 
@@ -190,56 +190,57 @@ public class SpiderNode extends Node {
                 //System.out.println("Black Spider");
 
                 //transverse from sprites location using Depth Limited DFS
-                dlDFS.traverse(maze, maze[row][col]);
+                //dlDFS.traverse(maze, maze[row][col]);
                 break;
 
             case 7:
                 //System.out.println("Blue Spider");
 
                 //transverse from sprites location using bestFirstTraverser
-                //bestFirst.traverse(maze, maze[row][col]);
+                bestFirst.traverse(maze, maze[row][col]);
+                //System.out.println("Finished travversing");
                 break;
 
             case 8:
                 //System.out.println("Brown Spider");
 
                 //transverse from sprites location using Depth Limited DFS
-                dlDFS.traverse(maze, maze[row][col]);
+                //dlDFS.traverse(maze, maze[row][col]);
                 break;
 
             case 9:
                 //System.out.println("Green Spider");
 
                 //transverse from sprites location using Depth Limited DFS
-                dlDFS.traverse(maze, maze[row][col]);
+                //dlDFS.traverse(maze, maze[row][col]);
                 break;
 
             case 10:
                 //System.out.println("Grey Spider");
 
                 //transverse from sprites location using Depth Limited DFS
-                dlDFS.traverse(maze, maze[row][col]);
+                //dlDFS.traverse(maze, maze[row][col]);
                 break;
 
             case 11:
                 //System.out.println("Orange Spider");
 
                 //transverse from sprites location using Depth Limited DFS
-                dlDFS.traverse(maze, maze[row][col]);
+                //dlDFS.traverse(maze, maze[row][col]);
                 break;
 
             case 12:
                 //System.out.println("Red Spider");
 
                 //transverse from sprites location using Depth Limited DFS
-                dlDFS.traverse(maze, maze[row][col]);
+                //dlDFS.traverse(maze, maze[row][col]);
                 break;
 
             case 13:
                 //System.out.println("Yellow Spider");
 
                 //transverse from sprites location using Depth Limited DFS
-                dlDFS.traverse(maze, maze[row][col]);
+                //dlDFS.traverse(maze, maze[row][col]);
                 break;
             default:
                 System.out.println("Not a Spider");
@@ -249,13 +250,15 @@ public class SpiderNode extends Node {
         }
 
         // get the next node to move to
-        nextMove = dlDFS.getNextNode();
+        nextMove = bestFirst.getNextNode();
 
         // flag as having a next move
         if(nextMove != null){
             hasNextMove = true;
+            System.out.println("Moving towards player");
         } else {
             hasNextMove = false;
+            //System.out.println("has no next Move");
         }
 
     }
