@@ -1,6 +1,7 @@
 package ie.gmit.sw.ai.fuzzyLogic;
 
 import net.sourceforge.jFuzzyLogic.*;
+import net.sourceforge.jFuzzyLogic.plot.JFuzzyChart;
 import net.sourceforge.jFuzzyLogic.rule.*;
 
 /**
@@ -30,6 +31,9 @@ public class Runner {
 
         //JFuzzyChart.get().chart(injuries, injuries.getDefuzzifier(), true);
         System.out.println("Injuries: " + injuries.defuzzify());
+
+        FuzzyEnemyStatusClassifier f = new FuzzyEnemyStatusClassifier();
+
     }
 }
 
