@@ -107,7 +107,7 @@ public class PlayerNode extends Node {
         }catch (Exception ex){
 
         } // try
-        
+
     } // startCombat()
 
     public int getHealth() {

@@ -88,7 +88,7 @@ public class CombatDecisionNN {
         System.out.println("Heal");
     }
 
-    public void action(double health, double sword, double bomb, double enemies) throws Exception{
+    public int action(double health, double sword, double bomb, double enemies) throws Exception{
 
         double[] params = {health, sword, bomb, enemies};
 
@@ -99,21 +99,22 @@ public class CombatDecisionNN {
         }
 
         int output = (Utils.getMaxIndex(result) + 1);
-        //System.out.println("Output: " + output);
 
         switch(output){
             case 1:
                 attack();
-                break;
+                return 1;
             case 2:
                 panic();
-                break;
+                return 2;
             case 3:
                 heal();
-                break;
+                return  3;
             default:
                 runAway();
-        }
-    }
+                return 4;
+        } // switch
+
+    } // action()
 
 } // class
