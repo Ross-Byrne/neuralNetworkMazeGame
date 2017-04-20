@@ -10,15 +10,10 @@ public class GameRunner implements KeyListener{
 	private static final int IMAGE_COUNT = 14;
 	private GameView view;
 	private Maze model;
-	private int currentRow;
-	private int currentCol;
 	
 	public GameRunner() throws Exception{
 		model = new Maze(MAZE_DIMENSION);
     	view = new GameView(model);
-
-    	currentRow=model.getPlayer().getRow();
-        currentCol=model.getPlayer().getCol();
 
     	Sprite[] sprites = getSprites();
     	view.setSprites(sprites);
@@ -41,39 +36,44 @@ public class GameRunner implements KeyListener{
 
 	private void updateView(){
 
-		currentRow=model.getPlayer().getRow();
-		currentCol=model.getPlayer().getCol();
-
-		view.setCurrentRow(currentRow);
-		view.setCurrentCol(currentCol);
+		view.setCurrentRow(getCurrentRow());
+		view.setCurrentCol(getCurrentCol());
 	}
 
+	private int getCurrentRow(){
+	    return model.getPlayer().getRow();
+    }
+
+    private int getCurrentCol(){
+        return model.getPlayer().getCol();
+    }
+
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT && currentCol < MAZE_DIMENSION - 1) {
-        	if (isValidMove(currentRow, currentCol + 1)) currentCol++;   		
-        }else if (e.getKeyCode() == KeyEvent.VK_LEFT && currentCol > 0) {
-        	if (isValidMove(currentRow, currentCol - 1)) currentCol--;	
-        }else if (e.getKeyCode() == KeyEvent.VK_UP && currentRow > 0) {
-        	if (isValidMove(currentRow - 1, currentCol)) currentRow--;
-        }else if (e.getKeyCode() == KeyEvent.VK_DOWN && currentRow < MAZE_DIMENSION - 1) {
-        	if (isValidMove(currentRow + 1, currentCol)) currentRow++;        	  	
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT && getCurrentCol() < MAZE_DIMENSION - 1) {
+            tryMove(getCurrentRow(), getCurrentCol() + 1);
+        }else if (e.getKeyCode() == KeyEvent.VK_LEFT && getCurrentCol() > 0) {
+        	    tryMove(getCurrentRow(), getCurrentCol() - 1);
+        }else if (e.getKeyCode() == KeyEvent.VK_UP && getCurrentRow() > 0) {
+        	    tryMove(getCurrentRow() - 1, getCurrentCol());
+        }else if (e.getKeyCode() == KeyEvent.VK_DOWN && getCurrentRow() < MAZE_DIMENSION - 1) {
+                tryMove(getCurrentRow() + 1, getCurrentCol());
         }else if (e.getKeyCode() == KeyEvent.VK_Z){
         	view.toggleZoom();
         }else{
         	return;
         }
         
-        updateView();
+        //updateView();
     }
     public void keyReleased(KeyEvent e) {} //Ignore
 	public void keyTyped(KeyEvent e) {} //Ignore
 
     
-	private boolean isValidMove(int row, int col){
+	private boolean tryMove(int row, int col){
 		if (row <= model.size() - 1 && col <= model.size() - 1 && model.get(row, col).getId() == -1){
 
 			// move node player is going to move to, to the players place
-			model.set(currentRow, currentCol, model.get(row, col));
+			model.set(getCurrentRow(), getCurrentCol(), model.get(row, col));
 
 			// move the player to the next position
 			model.set(row, col, model.getPlayer());

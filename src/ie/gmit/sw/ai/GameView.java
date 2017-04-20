@@ -54,6 +54,10 @@ public class GameView extends JPanel implements ActionListener{
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
 
+        // update player position
+		setCurrentRow(maze.getPlayer().getRow());
+		setCurrentCol(maze.getPlayer().getCol());
+
         cellspan = zoomOut ? maze.size() : 5;
         final int size = DEFAULT_VIEW_SIZE/cellspan;
         g2.drawRect(0, 0, GameView.DEFAULT_VIEW_SIZE, GameView.DEFAULT_VIEW_SIZE);
