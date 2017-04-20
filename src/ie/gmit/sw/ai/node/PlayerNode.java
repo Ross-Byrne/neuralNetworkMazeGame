@@ -3,6 +3,7 @@ package ie.gmit.sw.ai.node;
 import ie.gmit.sw.ai.fuzzyLogic.FuzzyEnemyStatusClassifier;
 import ie.gmit.sw.ai.fuzzyLogic.FuzzyHealthClassifier;
 import ie.gmit.sw.ai.neuralNetwork.CombatDecisionNN;
+import ie.gmit.sw.ai.traversers.PlayerDepthLimitedDFSTraverser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class PlayerNode extends Node {
     private boolean inCombat=false;
     private long movementSpeed = 3000;
     private ExecutorService executor = Executors.newFixedThreadPool(1);
+    private PlayerDepthLimitedDFSTraverser depthLimitedDFSTraverser;
     private CombatDecisionNN combatNet = null;
     private FuzzyHealthClassifier healthClassifier = null;
     private FuzzyEnemyStatusClassifier enemyStatusClassifier = null;
@@ -47,6 +49,7 @@ public class PlayerNode extends Node {
         combatNet = new CombatDecisionNN();
         healthClassifier = new FuzzyHealthClassifier();
         enemyStatusClassifier = new FuzzyEnemyStatusClassifier();
+        depthLimitedDFSTraverser = new PlayerDepthLimitedDFSTraverser();
 
         // start player thread
         executor.submit(() -> {
@@ -58,6 +61,7 @@ public class PlayerNode extends Node {
                     if(getHealth() <= 0){
                         // player is dead
                         isDead = true;
+
                         System.out.println("\n===============================================");
                         System.out.println("Player is Dead!");
                         System.out.println("===============================================\n");
@@ -87,8 +91,10 @@ public class PlayerNode extends Node {
 
         // initialise combat with selected spider
         // tell spider combat is starting
+        spider.setInCombat(true);
 
-        // get number of enemies
+        // flag self as in combat
+        this.inCombat = true;
 
         // decide what to do
         try {
@@ -104,6 +110,14 @@ public class PlayerNode extends Node {
             double swordStatus = 0;
             double bombStatus = 0;
             double enemyStatus = 0;
+
+            // scan for enemies
+            depthLimitedDFSTraverser.traverseForEnemies(maze, maze[getRow()][getCol()], 4);
+
+            // get number of enemies
+            setNoOfEnemies(depthLimitedDFSTraverser.traverseForEnemies(maze, maze[getRow()][getCol()], 4).size());
+
+            System.out.println("Enemies Nearby: " + getNoOfEnemies());
 
             // set health in health classifier
             healthClassifier.setInputVariable("health", getHealth());
@@ -161,7 +175,6 @@ public class PlayerNode extends Node {
             System.out.println("BombStat: " + bombStatus);
             System.out.println("enemyStatus: " + enemyStatus);
             System.out.println("Actual Health: " + getHealth());
-
             System.out.println("===============================================");
 
             // execute decision
@@ -182,6 +195,12 @@ public class PlayerNode extends Node {
 
         }catch (Exception ex){
 
+            // tell spider combat is over
+            spider.setInCombat(false);
+
+            // flag self as not in combat
+            this.inCombat = false;
+
         } // try
 
     } // startCombat()
@@ -189,12 +208,6 @@ public class PlayerNode extends Node {
     private void attack(SpiderNode spider){
         System.out.println("===============================================");
         System.out.println("Attacking!");
-
-        // flag spider as in combat
-        spider.setInCombat(true);
-
-        // flag self as in combat
-        this.inCombat = true;
 
         // get spider health
         int spiderHealth = spider.getHealth();
@@ -256,7 +269,6 @@ public class PlayerNode extends Node {
         } // if
 
         System.out.println("Player's Health: " + getHealth());
-
         System.out.println("===============================================\n");
 
     } // attack()
@@ -264,12 +276,6 @@ public class PlayerNode extends Node {
     private void panic(SpiderNode spider){
         System.out.println("===============================================");
         System.out.println("Starting to Panic!");
-
-        // flag spider as in combat
-        spider.setInCombat(true);
-
-        // flag self as in combat
-        this.inCombat = true;
 
         // 50% chance to take damage
         if(rand.nextInt(100) > 49){
@@ -301,12 +307,6 @@ public class PlayerNode extends Node {
     private void heal(SpiderNode spider){
         System.out.println("===============================================");
         System.out.println("Trying to Heal!");
-
-        // flag spider as in combat
-        spider.setInCombat(true);
-
-        // flag self as in combat
-        this.inCombat = true;
 
         // 50% chance to heal
         if(rand.nextInt(100) > 49) {
@@ -341,12 +341,6 @@ public class PlayerNode extends Node {
     private void runAway(SpiderNode spider){
         System.out.println("===============================================");
         System.out.println("Trying to Run Away!");
-
-        // flag spider as in combat
-        spider.setInCombat(true);
-
-        // flag self as in combat
-        this.inCombat = true;
 
         // 50% chance to heal
         if(rand.nextInt(100) > 49) {
@@ -500,12 +494,8 @@ public class PlayerNode extends Node {
         return noOfEnemies;
     }
 
-    public void increaseNoOfEnemies(int noOfEnemies) {
-        this.noOfEnemies += noOfEnemies;
-    }
-
-    public void decreaseNoOfEnemies(int noOfEnemies) {
-        this.noOfEnemies -= noOfEnemies;
+    public void setNoOfEnemies(int noOfEnemies){
+        this.noOfEnemies = noOfEnemies;
     }
 
     // gets the players damage

@@ -15,9 +15,10 @@ public class Runner {
 
         FIS fis = FIS.load("./fcl/health.fcl", true);
         FunctionBlock fb = fis.getFunctionBlock("Project");
-        //JFuzzyChart.get().chart(fb);
-        fis.setVariable("health", 50);
-        //fis.setVariable("health", 90);
+       // JFuzzyChart.get().chart(fb);
+
+//        fis.setVariable("health", 60);
+
         fis.evaluate();
 
         // Show output variable's chart
@@ -32,7 +33,7 @@ public class Runner {
         //JFuzzyChart.get().chart(injuries, injuries.getDefuzzifier(), true);
         System.out.println("Injuries: " + injuries.defuzzify());
 
-        FuzzyEnemyStatusClassifier f = new FuzzyEnemyStatusClassifier();
+
 
     }
 }

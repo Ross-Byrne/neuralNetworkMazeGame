@@ -9,15 +9,15 @@ FUNCTION_BLOCK Project
     END_VAR
 
     FUZZIFY health
-        TERM low := (0, 1) (15, 1) (35, 0);
-        TERM normal := (30,0)(45,1)(75,1)(95,0);
-        TERM high := (85, 0)  (100, 1);
+        TERM low := (0, 1) (25, 1) (40, 0);
+        TERM normal := (35,0)(50,1)(75,0);
+        TERM high := (70, 0)  (100, 1);
     END_FUZZIFY
 
     DEFUZZIFY injuries
-        TERM serious := (0, 1) (35, 0);
-        TERM minor := (30, 0) (50, 1) (85, 0);
-        TERM none := (85, 0)  (100, 1);
+        TERM serious := (0, 1) (25, 1) (40, 0);
+        TERM minor := (40, 0)(50, 1) (60, 1) (75, 0);
+        TERM none := (70, 0)  (100, 1);
         METHOD : COG;
         DEFAULT := 0;
     END_DEFUZZIFY
