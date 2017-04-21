@@ -70,6 +70,8 @@ public class PlayerNode extends Node {
                     // sleep thread to simulate a movement pace
                     Thread.sleep(movementSpeed);
 
+                    checkForPickup();
+
                     // don't do anything if in combat
                     if(!inCombat) {
 
@@ -421,6 +423,60 @@ public class PlayerNode extends Node {
 
     } // flee()
 
+    public void checkForPickup(){
+        Node[] adjacentNodes = adjacentNodes(maze);
+
+        for (Node n : adjacentNodes) {
+            if(n.getId()==1){
+                //sword - increase swords by one
+                increaseSwords();
+                //replaces pickup with hedge
+                n.setId(0);
+                System.out.println("Picked up a sword");
+                System.out.println("Sword count "+getSwords());
+            }
+            if(n.getId()==2){
+                //random Pickup
+                int  randNum = rand.nextInt(3) + 1;
+
+                switch (randNum){
+                    case 1:
+                        increaseHealth(20);
+                        System.out.println("Random Pickup was +20 Health");
+                        break;
+                    case 2:
+                        increaseSwords();
+                        System.out.println("Random Pickup was a sword");
+                        break;
+                    case 3:
+                        increaseBombs();
+                        System.out.println("Random Pickup was a bomb");
+                        break;
+                }
+                //replaces pickup with hedge
+                n.setId(0);
+
+            }
+            if(n.getId()==3){
+                //regular bomb - increase bombs by 1
+                increaseBombs();
+                //replaces pickup with hedge
+                n.setId(0);
+                System.out.println("Picked up a bomb");
+            }
+            if(n.getId()==4){
+                // hydrogen bomb - gives 2 bombs
+                increaseBombs();
+                increaseBombs();
+                //replaces pickup with hedge
+                n.setId(0);
+                System.out.println("Picked up a Hydrogen Bomb");
+            }
+
+        } // for
+
+    } // flee()
+
     private void swapNodes(Node x, Node y){
 
         int newX, newY, oldX, oldY;
@@ -466,7 +522,7 @@ public class PlayerNode extends Node {
     }
 
     public void increaseBombs() {
-        this.bombs += bombs;
+        this.bombs++;
     }
 
     public void decreaseBombs() {
@@ -481,11 +537,11 @@ public class PlayerNode extends Node {
         return swords;
     }
 
-    public void increaseSwords(int swords) {
-        this.swords += swords;
+    public void increaseSwords() {
+        this.swords++;
     }
 
-    public void decreaseSwords(int swords) {
+    public void decreaseSwords() {
         this.swords -= swords;
     }
 
