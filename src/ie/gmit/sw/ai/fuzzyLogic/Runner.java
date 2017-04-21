@@ -7,7 +7,7 @@ import net.sourceforge.jFuzzyLogic.rule.*;
 /**
  * Adapted from fuzzyLogic lab from moodle
  *
- * 
+ *Tests the health classifier
  */
 public class Runner {
 
@@ -15,9 +15,9 @@ public class Runner {
 
         FIS fis = FIS.load("./fcl/health.fcl", true);
         FunctionBlock fb = fis.getFunctionBlock("Project");
-       // JFuzzyChart.get().chart(fb);
+        JFuzzyChart.get().chart(fb);
 
-//        fis.setVariable("health", 60);
+        fis.setVariable("health", 60);
 
         fis.evaluate();
 
@@ -30,7 +30,7 @@ public class Runner {
         System.out.println("Normal Health: " + injuries.getMembership("minor"));
         System.out.println("High Health: " + injuries.getMembership("none"));
 
-        //JFuzzyChart.get().chart(injuries, injuries.getDefuzzifier(), true);
+        JFuzzyChart.get().chart(injuries, injuries.getDefuzzifier(), true);
         System.out.println("Injuries: " + injuries.defuzzify());
 
 

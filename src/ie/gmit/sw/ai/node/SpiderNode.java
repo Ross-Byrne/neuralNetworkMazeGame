@@ -24,7 +24,7 @@ import java.util.concurrent.*;
  * Green spiders Heal the player a small amount.
  * Yellow spiders only attack the player once the player has attacked one of the yellow spiders.
  * Then all the yellow spiders will attack the player.
- * 
+ *
  */
 public class SpiderNode extends Node {
 

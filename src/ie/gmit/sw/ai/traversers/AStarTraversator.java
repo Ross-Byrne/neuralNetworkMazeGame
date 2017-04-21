@@ -3,7 +3,7 @@ package ie.gmit.sw.ai.traversers;
 import ie.gmit.sw.ai.node.*;
 import java.util.*;
 
-/*
+/**
 	A* search adapted from class. Changes made to make it work with out project.
 	It is now a little more streamlined then original.
  */

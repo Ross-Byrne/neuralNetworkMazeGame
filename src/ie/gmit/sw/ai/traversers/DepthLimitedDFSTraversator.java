@@ -38,13 +38,9 @@ public class DepthLimitedDFSTraversator implements Traversator{
 		    pathToGoal.addFirst(node);
         } // if
 
-		//System.out.println("Finished Search: " + isVisited.size() + " Visit count: " + visitCount);
-
 		// clear visited nodes
 		isVisited = null;
 
-		//if(pathToGoal.size() > 0)
-            //System.out.println("Path size: " + pathToGoal.size());
     }
 
     // gets the next node in the path
