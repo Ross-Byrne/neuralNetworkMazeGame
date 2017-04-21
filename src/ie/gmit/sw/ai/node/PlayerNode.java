@@ -3,7 +3,9 @@ package ie.gmit.sw.ai.node;
 import ie.gmit.sw.ai.fuzzyLogic.FuzzyEnemyStatusClassifier;
 import ie.gmit.sw.ai.fuzzyLogic.FuzzyHealthClassifier;
 import ie.gmit.sw.ai.neuralNetwork.CombatDecisionNN;
+import ie.gmit.sw.ai.traversers.AStarTraversator;
 import ie.gmit.sw.ai.traversers.PlayerDepthLimitedDFSTraverser;
+import ie.gmit.sw.ai.traversers.Traversator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +52,10 @@ public class PlayerNode extends Node {
         healthClassifier = new FuzzyHealthClassifier();
         enemyStatusClassifier = new FuzzyEnemyStatusClassifier();
         depthLimitedDFSTraverser = new PlayerDepthLimitedDFSTraverser();
+        Traversator aStar = new AStarTraversator(maze[3][3]);
+
+        aStar.traverse(maze,this);
+
 
         // start player thread
         executor.submit(() -> {
@@ -71,6 +77,9 @@ public class PlayerNode extends Node {
                     Thread.sleep(movementSpeed);
 
                     checkForPickup();
+
+
+
 
                     // don't do anything if in combat
                     if(!inCombat) {

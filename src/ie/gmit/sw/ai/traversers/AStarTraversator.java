@@ -5,6 +5,8 @@ import java.util.*;
 
 public class AStarTraversator implements Traversator{
 	private Node goal;
+    private Set<Node> isVisited = null;
+    private Map<Node,Integer> nodeCost = null;
 	
 	public AStarTraversator(Node goal){
 		this.goal = goal;
@@ -16,35 +18,51 @@ public class AStarTraversator implements Traversator{
     	
 		PriorityQueue<Node> open = new PriorityQueue<Node>(20, (Node current, Node next)-> (current.getPathCost() + current.getHeuristic(goal)) - (next.getPathCost() + next.getHeuristic(goal)));
 		List<Node> closed = new ArrayList<Node>();
-    	   	
+
+        nodeCost = new HashMap<>();
+
+
+        isVisited = new HashSet<>();
+
 		open.offer(node);
-		node.setPathCost(0);		
+		node.setPathCost(0);
+
+		//nodeCost.putIfAbsent(node,0);
+
+        System.out.println(goal.getId());
+
 		while(!open.isEmpty()){
 			node = open.poll();		
 			closed.add(node);
-			node.setVisited(true);	
+			//
+            // node.setVisited(true);
+            //isVisited.add(node);
 			visitCount++;
-			
-			if (node.isGoalNode()){
+
+            System.out.println(node);
+
+            if (node.equals(goal)){
 		        time = System.currentTimeMillis() - time; //Stop the clock
 		        TraversatorStats.printStats(node, time, visitCount);
 				break;
 			}
-			
-			try { //Simulate processing each expanded node
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+
+
 			
 			//Process adjacent nodes
-			Node[] children = node.children(maze);
+			Node[] children = node.adjacentNodes(maze);
 			for (int i = 0; i < children.length; i++) {
 				Node child = children[i];
-				int score = node.getPathCost() + 1 + child.getHeuristic(goal);
-				int existing = child.getPathCost() + child.getHeuristic(goal);
-				
-				if ((open.contains(child) || closed.contains(child)) && existing < score){
+
+                //child.setPathCost(node.getPathCost()+1);
+
+
+				//int score = node.getPathCost() + child.getHeuristic(goal);
+				//int existing = child.getPathCost() + child.getHeuristic(goal);
+
+                //System.out.println("Score: "+score+" Existing: "+existing);
+
+				if ((open.contains(child) || closed.contains(child)) ){//&& existing < score
 					continue;
 				}else{
 					open.remove(child);
@@ -55,7 +73,7 @@ public class AStarTraversator implements Traversator{
 				}
 			}									
 		}
-	}
+    }
 
     public Node getNextNode() {
         return null;

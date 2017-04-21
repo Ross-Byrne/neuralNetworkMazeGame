@@ -171,10 +171,15 @@ public class Maze {
 				else if(feature == 5) { // if player
 
 					//create the player node
-					player = new PlayerNode(row,col,maze);
+					//player = new PlayerNode(row,col,maze);
 
 					//set the player node
-					maze[row][col] = player;
+					//maze[row][col] = player;
+
+                    player = new PlayerNode(10,10,maze);
+
+                    //set the player node
+                    maze[10][10] = player;
 				}
 				else
 				{
