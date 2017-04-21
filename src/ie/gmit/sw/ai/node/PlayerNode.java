@@ -37,6 +37,7 @@ public class PlayerNode extends Node {
     private FuzzyEnemyStatusClassifier enemyStatusClassifier = null;
     private Random rand = new Random();
     private boolean hasTarget = false;
+    private Node target;
 
 
     public PlayerNode(int row, int col, Node[][] maze, Object lock) {
@@ -56,9 +57,6 @@ public class PlayerNode extends Node {
         healthClassifier = new FuzzyHealthClassifier();
         enemyStatusClassifier = new FuzzyEnemyStatusClassifier();
         depthLimitedDFSTraverser = new PlayerDepthLimitedDFSTraverser();
-        //Traversator aStar = new AStarTraversator(maze[3][3]);
-       // aStar.traverse(maze,this);
-       // System.out.println(aStar.getNextNode() +" current node: "+this);
 
         // start player thread
         executor.submit(() -> {
@@ -469,15 +467,15 @@ public class PlayerNode extends Node {
     // decides whether to attack or get pickups
     private void checkForPicksAndEnemies(){
 
-        Node target = null;
+        target = null;
         Set<Node> enemyNodes;
         Set<Node> pickupNodes;
         int last = 100000;
         int heuistic = 0;
 
         // scan for pickups and enemies farther way
-        enemyNodes = depthLimitedDFSTraverser.traverseForEnemies(maze, this, 10);
-        pickupNodes = depthLimitedDFSTraverser.traverseForPickups(maze, this, 10);
+        enemyNodes = depthLimitedDFSTraverser.traverseForEnemies(maze, this, 30);
+        pickupNodes = depthLimitedDFSTraverser.traverseForPickups(maze, this, 30);
 
         if(getHealth() < 60 || getSwords() < 0 && getBombs() < 5 || getBombs() < 5){
 
@@ -526,14 +524,24 @@ public class PlayerNode extends Node {
 
     private void moveInOnTarget(){
 
-        if(hasTarget){
+        if(hasTarget && target != null){
 
             // use A* to get next move
 
+            Traversator aStar = new AStarTraversator(target);
+            aStar.traverse(maze,this);
+            nextMove = aStar.getNextNode();
+            hasNextMove = true;
+            System.out.println("Next Move" + nextMove +" current node: "+this + " Target: " + target);
 
         }
+        else
+        {
+            hasTarget = false;
+            target = null;
+        } // if
 
-    }
+    } // moveInOnTarget
 
     private void moveToNextNode(){
 
@@ -549,12 +557,26 @@ public class PlayerNode extends Node {
                         // save last node
                         lastNode = nextMove;
 
+                        // if at target, finish
+                        if(nextMove.equals(target)){
+
+                            target = null;
+                            hasTarget = false;
+                            System.out.println("Got target");
+
+                        }
+
+
                         // swap nodes to move
                         swapNodes(this, nextMove);
 
                         // reset nextMove
                         nextMove = null;
                         hasNextMove = false;
+
+                        // go for target if player has one
+                        if(hasTarget && target != null)
+                            moveInOnTarget();
 
                         // return
                         return;
@@ -658,6 +680,13 @@ public class PlayerNode extends Node {
         Node[] adjacentNodes = adjacentNodes(maze);
 
         for (Node n : adjacentNodes) {
+
+            // check if node is target
+            if(n.equals(target)){
+                target = null;
+                hasTarget = false;
+            }
+
             if(n.getId()==1){
                 //sword - increase swords by one
                 increaseSwords();
