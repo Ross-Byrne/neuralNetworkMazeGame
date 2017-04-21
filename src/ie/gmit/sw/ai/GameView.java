@@ -75,7 +75,7 @@ public class GameView extends JPanel implements ActionListener{
                         if (row == currentRow && col == currentCol){
                             g2.setColor(Color.YELLOW);
                         }else{
-                            g2.setColor(reds[(int) (Math.random() * 3)]);
+                            g2.setColor(Color.RED);
                             if (id==12)
                                 g2.setColor(Color.BLACK);
                         }

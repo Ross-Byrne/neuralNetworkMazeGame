@@ -265,6 +265,23 @@ public class PlayerNode extends Node {
             increaseHealth(20);
         }
 
+        // if boss, use x2 extra bombs
+        if(spider.getId() == 12){
+
+            if(getBombs() > 2) {
+
+                spider.decreaseHealth(bombDamage + bombDamage); // use 2 bombs
+                decreaseBombs();
+                decreaseBombs();
+            }
+            else if(getBombs() > 1){ // just use 1 extra
+
+                spider.decreaseHealth(bombDamage); // use 1 bomb
+                decreaseBombs();
+
+            } // if
+        } // if
+
         // use bomb if have one and can't one hit spider
         if(spiderHealth > getDamage() && getBombs() > 0){
 
@@ -323,6 +340,7 @@ public class PlayerNode extends Node {
         } // if
 
         System.out.println("Player's Health: " + getHealth());
+        System.out.println("Player's Bombs: " + getBombs());
         System.out.println("===============================================\n");
 
         // check if spider was boss
@@ -483,7 +501,7 @@ public class PlayerNode extends Node {
         enemyNodes = depthLimitedDFSTraverser.traverseForEnemies(maze, this, 60);
         pickupNodes = depthLimitedDFSTraverser.traverseForPickups(maze, this, 60);
 
-        if((getHealth() < 60 || getSwords() < 0 && getBombs() < 5 || getBombs() < 5) && pickupNodes.size() > 0){
+        if((getHealth() < 60 || getSwords() < 0 || getBombs() < 5) && pickupNodes.size() > 0){
 
             // go get closest pickup
             for (Node n : pickupNodes){

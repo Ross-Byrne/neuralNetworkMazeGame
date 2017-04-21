@@ -45,6 +45,11 @@ public class SpiderNode extends Node {
         // add a random offset to spiders speed
         movementSpeed += rand.nextInt(501);
 
+        // if boss
+        if(getId() == 12){
+            movementSpeed = 1200;
+        }
+
         // start moving the spider
         executor.submit(() -> {
 
