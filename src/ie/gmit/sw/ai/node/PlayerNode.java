@@ -13,6 +13,34 @@ import java.util.concurrent.*;
  *
  * The Node that represents the player.
  * Contains all of the player logic.
+ *
+ * Uses the Combat Neural network which uses the two fuzzy logic classifiers
+ * FuzzyEnemyStatusClassifier and FuzzyHealthClassifier to get a result from the
+ * Neural network to decide what happens when cobat starts.
+ * IF the player is going to attack, it uses a bomb if it has one,
+ * or up to 3 bombs for the boss.
+ * Having a sword increases the players damage by +10.
+ *
+ * If the player Panics, there is a 50% the player will take damage
+ * and then it will go back into combat and attack
+ *
+ * IF the player heals, there is a 50% chance it will work. IF it works,
+ * the player will jump back a space if it can and regain +10 health.
+ *
+ * IF the player tries to run, there is a 50% it will jump back and exit combat,
+ * so the player can run away. IF it fails, it will go back into combat and attack.
+ *
+ * The Player uses A* to navigate to a target if the player is AI controlled. Otherwise the user
+ * must control the player.
+ *
+ * The player will look for pickups if it's health is less then 60 OR it doesn't have a sword
+ * OR it doesn't have 5 bombs.
+ *
+ * Otherwise the player will look for enemies to kill.
+ *
+ * Once the player has 3 bombs and a sword, the Boss will come looking for it.
+ *
+ * The player uses a custom depth limited depth first search to scan for enemies and pickups.
  */
 public class PlayerNode extends Node {
 

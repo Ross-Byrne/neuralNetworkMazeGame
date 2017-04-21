@@ -11,6 +11,20 @@ import java.util.concurrent.*;
  * Created by Ross Byrne on 17/04/17.
  * An extension of Node class, to represent the spiders.
  * Contains all of the spider logic.
+ *
+ * The red spider is the Boss. There is only one boss. (There can only be one!)
+ *
+ * The spiders use a depth limited depth first search to scan for the player.
+ * IF the spider finds the player, they will start moving towards the player.
+ * IF they don't find the player they will wander randomly.
+ *
+ * The blue and Red spiders use a best first search to find the player, the others use DLDFS.
+ * The Brown spiders flee from the player if they find the player with a scan.
+ *
+ * Green spiders Heal the player a small amount.
+ * Yellow spiders only attack the player once the player has attacked one of the yellow spiders.
+ * Then all the yellow spiders will attack the player.
+ * 
  */
 public class SpiderNode extends Node {
 
@@ -132,7 +146,7 @@ public class SpiderNode extends Node {
 
                 // if not returned, didn't have next move
                 // move randomly instead
-                //randomMove();
+                randomMove();
 
                 // reset next move
                 nextMove = null;
