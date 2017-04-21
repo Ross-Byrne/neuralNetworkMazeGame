@@ -245,7 +245,6 @@ public class SpiderNode extends Node {
 
                 //transverse from sprites location using Depth Limited DFS
                 dlDFS.traverse(maze, maze[row][col]);
-
                 // get the next node to move to
                 nextMove = dlDFS.getNextNode();
 
@@ -281,7 +280,6 @@ public class SpiderNode extends Node {
 
                 //transverse from sprites location using Depth Limited DFS
                 dlDFS.traverse(maze, maze[row][col]);
-
                 // get the next node to move to
                 nextMove = dlDFS.getNextNode();
 
@@ -297,8 +295,9 @@ public class SpiderNode extends Node {
             case 10:
                 //Grey Spider
 
-                //Grey spiders are passive never attack player
-                //random walk around maze
+                dlDFS.traverse(maze, maze[row][col]);
+                // get the next node to move to
+                nextMove = dlDFS.getNextNode();
 
                 break;
 

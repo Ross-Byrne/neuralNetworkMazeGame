@@ -4,7 +4,9 @@ import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.fuzzyLogic.FuzzyEnemyStatusClassifier;
 import ie.gmit.sw.ai.fuzzyLogic.FuzzyHealthClassifier;
 import ie.gmit.sw.ai.neuralNetwork.CombatDecisionNN;
+import ie.gmit.sw.ai.traversers.AStarTraversator;
 import ie.gmit.sw.ai.traversers.PlayerDepthLimitedDFSTraverser;
+import ie.gmit.sw.ai.traversers.Traversator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,9 +53,16 @@ public class PlayerNode extends Node {
         healthClassifier = new FuzzyHealthClassifier();
         enemyStatusClassifier = new FuzzyEnemyStatusClassifier();
         depthLimitedDFSTraverser = new PlayerDepthLimitedDFSTraverser();
+        Traversator aStar = new AStarTraversator(maze[3][3]);
+
+
+        aStar.traverse(maze,this);
+
+        System.out.println(aStar.getNextNode() +" current node: "+this);
 
         // start player thread
         executor.submit(() -> {
+
 
             while (true) {
                 try {
@@ -76,8 +85,9 @@ public class PlayerNode extends Node {
                         // sleep thread to simulate a movement pace
                         Thread.sleep(movementSpeed);
 
-                        // don't do anything if in combat
-                        if (!inCombat) {
+                    // don't do anything if in combat
+                        if(!inCombat) {
+
 
                             // check for enemies right next to the player
                             checkForEnemies();
