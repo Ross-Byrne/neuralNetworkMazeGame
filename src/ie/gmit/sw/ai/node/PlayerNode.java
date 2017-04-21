@@ -454,6 +454,15 @@ public class PlayerNode extends Node {
         // check if there are enemies
         if(enemies.size() > 0){
 
+            // if at target, finish
+            if(enemies.get(0).equals(target)){
+
+                target = null;
+                hasTarget = false;
+                System.out.println("Got target");
+
+            }
+
             // start combat with first enemy
             startCombat((SpiderNode) enemies.get(0));
         } // if
@@ -474,7 +483,7 @@ public class PlayerNode extends Node {
         enemyNodes = depthLimitedDFSTraverser.traverseForEnemies(maze, this, 60);
         pickupNodes = depthLimitedDFSTraverser.traverseForPickups(maze, this, 60);
 
-        if(getHealth() < 60 || getSwords() < 0 && getBombs() < 5 || getBombs() < 5){
+        if((getHealth() < 60 || getSwords() < 0 && getBombs() < 5 || getBombs() < 5) && pickupNodes.size() > 0){
 
             // go get closest pickup
             for (Node n : pickupNodes){
@@ -487,6 +496,8 @@ public class PlayerNode extends Node {
 
                     last = heuistic;
                     target = n;
+
+                    System.out.println("New Target: " + target);
                 } // if
             } // for
 
@@ -503,12 +514,12 @@ public class PlayerNode extends Node {
 
                     last = heuistic;
                     target = n;
+
+                    System.out.println("New Target: " + target);
                 } // if
             } // for
 
         } // if
-
-        System.out.println("Target: " + target);
 
         // if target is obtained, move to it
         if(target != null){
@@ -525,12 +536,19 @@ public class PlayerNode extends Node {
 
             // use A* to get next move
 
+            // set goal node (target)
             Traversator aStar = new AStarTraversator(target);
-            aStar.traverse(maze,this);
-            nextMove = aStar.getNextNode();
-            hasNextMove = true;
-            System.out.println("Next Move" + nextMove +" current node: "+this + " Target: " + target);
 
+            // start search
+            aStar.traverse(maze,this);
+
+            // get the next move to move to goal node/target
+            nextMove = aStar.getNextNode();
+
+            // flag as having next move
+            hasNextMove = true;
+            
+            //System.out.println("Next Move" + nextMove +" current node: "+this + " Target: " + target);
         }
         else
         {
@@ -559,10 +577,9 @@ public class PlayerNode extends Node {
 
                             target = null;
                             hasTarget = false;
-                            System.out.println("Got target");
+                            System.out.println("Got Target.");
 
                         }
-
 
                         // swap nodes to move
                         swapNodes(this, nextMove);
@@ -637,7 +654,6 @@ public class PlayerNode extends Node {
 
             } else if(canMoveTo.size() < 1 && lastNode != null){ // if moved into a corner, go back to last node
 
-                System.out.println("No Moves");
                 // randomMove to last node
                 swapNodes(this, lastNode);
 
@@ -682,6 +698,7 @@ public class PlayerNode extends Node {
             if(n.equals(target)){
                 target = null;
                 hasTarget = false;
+                System.out.println("Got Target.");
             }
 
             if(n.getId()==1){
