@@ -470,7 +470,6 @@ public class PlayerNode extends Node {
                 //replaces pickup with hedge
                 n.setId(0);
                 System.out.println("Picked up a sword");
-                System.out.println("Sword count "+getSwords());
             }
             if(n.getId()==2){
                 //random Pickup
@@ -564,7 +563,7 @@ public class PlayerNode extends Node {
 
     public void decreaseBombs() {
 
-        this.bombs -= bombs;
+        this.bombs --;
 
         if(bombs < 0)
             bombs = 0;
@@ -574,13 +573,7 @@ public class PlayerNode extends Node {
         return swords;
     }
 
-    public void increaseSwords() {
-        this.swords++;
-    }
-
-    public void decreaseSwords() {
-        this.swords -= swords;
-    }
+    public void increaseSwords() {this.swords++;}
 
     public int getNoOfEnemies() {
         return noOfEnemies;
@@ -593,7 +586,6 @@ public class PlayerNode extends Node {
     // gets the players damage
     // includes sword if player has one
     public int getDamage(){
-
         int totalDamage = this.damage;
 
         if(swords > 0)

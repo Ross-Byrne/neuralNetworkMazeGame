@@ -3,9 +3,7 @@ package ie.gmit.sw.ai.node;
 import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.traversers.BestFirstTraversator;
 import ie.gmit.sw.ai.traversers.DepthLimitedDFSTraversator;
-import ie.gmit.sw.ai.traversers.PlayerDepthLimitedDFSTraverser;
 import ie.gmit.sw.ai.traversers.Traversator;
-
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -234,8 +232,7 @@ public class SpiderNode extends Node {
     } // swapNodes()
 
     private void search(int row, int col){
-        Traversator dlDFS = new DepthLimitedDFSTraversator(10,player); //
-        Traversator bossDlDFS = new DepthLimitedDFSTraversator(30,player);//bigger search for boss spiders
+        Traversator dlDFS = new DepthLimitedDFSTraversator(10,player);
         Traversator bestFirst = new BestFirstTraversator(player); //best path to player
 
         switch(id){
@@ -319,22 +316,12 @@ public class SpiderNode extends Node {
                 break;
 
             case 12:
-                //Red Spider
+                //Red Spider - Boss spider
 
-                //replace with better algo and decide to attack with neural network
-
-                if(player.getBombs()>3){
-                    bossDlDFS.traverse(maze, maze[row][col]);
-                    // get the next node to move to
-                    nextMove = bossDlDFS.getNextNode();
-
-                    //if found player use best first for find best path
-                    if(nextMove != null){
-                        //use best first to find best path
-                        bestFirst.traverse(maze, maze[row][col]);
-                        nextMove = bestFirst.getNextNode();
-                    }
-
+                //searches for player if players has 3 or more bombs and a sword
+                if(player.getBombs()>2&&player.getSwords()>0){
+                    bestFirst.traverse(maze, maze[row][col]);
+                    nextMove = bestFirst.getNextNode();
                 }
                 
                 break;
