@@ -1,11 +1,5 @@
 package ie.gmit.sw.ai;
 
-
-/*
-Make a Singleton, so the maze array can be updated from Sprite.
-Make maze array AtomicReferenceArray<Character> so it is concurrent.
- */
-
 import ie.gmit.sw.ai.node.Node;
 import ie.gmit.sw.ai.node.Node.Direction;
 import java.util.Deque;
@@ -169,15 +163,10 @@ public class Maze {
 				else if(feature == 5) { // if player
 
 					//create the player node
-					//player = new PlayerNode(row,col,maze);
+					player = new PlayerNode(row,col,maze);
 
 					//set the player node
-					//maze[row][col] = player;
-
-                    player = new PlayerNode(10,10, maze, lock);
-
-                    //set the player node
-                    maze[10][10] = player;
+					maze[row][col] = player;
 				}
 				else
 				{
