@@ -90,25 +90,22 @@ public class PlayerNode extends Node {
 
                             // check for picks right next to player
                             checkForPickup();
-
-                            // only go for target if one does not exist
-                            if(hasTarget == false) {
-
-                                // scan for pickups and enemies farther way
-                                checkForPicksAndEnemies();
-                            }
-                            else
-                            {
-                                // move in on target
-                                moveInOnTarget();
-
-                            }
-
+                            
                             // place move code here
                             if(GameRunner.AI_CONTROLLED){ // only move if AI controlled
 
-                                // scan for pickups and enemies farther way
-                                //checkForPicksAndEnemies();
+                                // only go for target if one does not exist
+                                if(hasTarget == false || target == null) {
+
+                                    // scan for pickups and enemies farther way
+                                    checkForPicksAndEnemies();
+                                }
+                                else
+                                {
+                                    // move in on target
+                                    moveInOnTarget();
+
+                                }
 
                                 // start moving the player
                                 if (hasNextMove) {          // if player has next move
