@@ -58,22 +58,21 @@ public class AStarTraversator implements Traversator{
     }
 
     public Node getNextNode() {
+
         Node last=null;
         Node current=null;
 
-        current=goal.getParent();
+        current = goal.getParent();
 
         do {
 
-
-            //System.out.println();
-
             if(!current.equals(start)){
-                last=current;
-            }
-            current=current.getParent();
-        }while(!current.equals(start));
 
+                last = current;
+            }
+
+            current = current.getParent();
+        }while(!current.equals(start));
 
         return last;
     }

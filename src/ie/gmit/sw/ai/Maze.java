@@ -176,7 +176,7 @@ public class Maze {
 					//set the player node
 					//maze[row][col] = player;
 
-                    player = new PlayerNode(10,10,maze);
+                    player = new PlayerNode(10,10, maze, lock);
 
                     //set the player node
                     maze[10][10] = player;

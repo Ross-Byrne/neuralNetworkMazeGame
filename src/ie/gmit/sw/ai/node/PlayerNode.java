@@ -17,6 +17,8 @@ import java.util.concurrent.*;
  * Created by Martin Coleman on 19/04/2017.
  */
 public class PlayerNode extends Node {
+
+    private Object lock;
     private int health = 100;
     private int bombs;
     private int swords;
@@ -28,21 +30,22 @@ public class PlayerNode extends Node {
     private Node nextMove = null;
     private boolean hasNextMove = false;
     private boolean inCombat=false;
-    private long movementSpeed = 3000;
+    private long movementSpeed = 1000;
     private ExecutorService executor = Executors.newFixedThreadPool(1);
     private PlayerDepthLimitedDFSTraverser depthLimitedDFSTraverser = null;
     private CombatDecisionNN combatNet = null;
     private FuzzyHealthClassifier healthClassifier = null;
     private FuzzyEnemyStatusClassifier enemyStatusClassifier = null;
     private Random rand = new Random();
-    private boolean isDead = false;
+    private Node lastNode;
 
-    public PlayerNode(int row, int col, Node[][] maze) {
+    public PlayerNode(int row, int col, Node[][] maze, Object lock) {
 
         super(row, col, 5);
 
         //Init Variables
         this.maze = maze;
+        this.lock = lock;
         this.health=100;
         this.bombs=0;
         this.swords=0;
@@ -88,13 +91,17 @@ public class PlayerNode extends Node {
                     // don't do anything if in combat
                         if(!inCombat) {
 
-
                             // check for enemies right next to the player
                             checkForEnemies();
 
                             checkForPickup();
 
                             // place move code here
+                            if(GameRunner.AI_CONTROLLED){ // only move if AI controlled
+
+                                // move randomly
+                                randomMove();
+                            } // if
 
                         } // if
                     } // if
@@ -434,6 +441,52 @@ public class PlayerNode extends Node {
         } // if
 
     } // checkForEnemies()
+
+    // Method for randomly moving the player
+    // run in a thread
+    private void randomMove(){
+
+        synchronized (lock) {
+
+            Node[] adjacentNodes = null;
+            List<Node> canMoveTo = new ArrayList<>();
+
+            // get the players adjacent nodes
+            adjacentNodes = adjacentNodes(maze);
+
+            for (Node n : adjacentNodes) {
+
+                // check that the node is empty space
+                if (n.getId() == -1 && !n.equals(lastNode)) {
+
+                    // add node to list of available nodes
+                    canMoveTo.add(n);
+                } // if
+            } // if
+
+            if (canMoveTo.size() > 0) {
+
+                // pick a random index to randomMove to
+                int index = rand.nextInt(canMoveTo.size());
+
+                // save last node
+                lastNode = canMoveTo.get(index);
+
+                // move player to selected adjacent node
+                swapNodes(this, canMoveTo.get(index));
+                
+            } else if(canMoveTo.size() < 1 && lastNode != null){ // if moved into a corner, go back to last node
+
+                System.out.println("No Moves");
+                // randomMove to last node
+                swapNodes(this, lastNode);
+
+            } // if
+
+        } // synchronized()
+
+    } // randomMove()
+
 
     public void flee(Node enemy){
 
