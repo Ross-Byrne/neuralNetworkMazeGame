@@ -76,6 +76,8 @@ public class GameView extends JPanel implements ActionListener{
                             g2.setColor(Color.YELLOW);
                         }else{
                             g2.setColor(reds[(int) (Math.random() * 3)]);
+                            if (id==12)
+                                g2.setColor(Color.BLACK);
                         }
                         g2.fillRect(x1, y1, size, size);
                     }
