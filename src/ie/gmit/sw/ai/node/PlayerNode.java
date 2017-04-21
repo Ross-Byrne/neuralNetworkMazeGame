@@ -251,6 +251,11 @@ public class PlayerNode extends Node {
             // not in combat
             inCombat = false;
 
+            //if attack a yellow spider all yellow turn hostile
+            if(spider.getId()==13){
+                SpiderNode.setYellowhostile(true);
+            }
+
             // remove spider
             maze[spider.getRow()][spider.getCol()] = new Node(spider.getRow(), spider.getCol(), -1);
         } else {
@@ -261,6 +266,11 @@ public class PlayerNode extends Node {
             decreaseHealth(spiderHealth);
 
             // spider dies
+
+            //if attack a yellow spider all yellow turn hostile
+            if(spider.getId()==13){
+                SpiderNode.setYellowhostile(true);
+            }
 
             // not in combat
             inCombat = false;
