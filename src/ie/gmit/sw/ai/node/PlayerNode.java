@@ -54,11 +54,14 @@ public class PlayerNode extends Node {
         depthLimitedDFSTraverser = new PlayerDepthLimitedDFSTraverser();
         Traversator aStar = new AStarTraversator(maze[3][3]);
 
+
         aStar.traverse(maze,this);
 
+        System.out.println(aStar.getNextNode() +" current node: "+this);
 
         // start player thread
         executor.submit(() -> {
+
 
             while (true) {
                 try {
