@@ -34,9 +34,6 @@ public class AStarTraversator implements Traversator{
 		        time = System.currentTimeMillis() - time; //Stop the clock
 		        //TraversatorStats.printStats(node, time, visitCount);
 
-
-
-
 				break;
 			}
 			//Process adjacent nodes

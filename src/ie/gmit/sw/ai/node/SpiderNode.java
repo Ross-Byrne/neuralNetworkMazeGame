@@ -15,7 +15,7 @@ import java.util.concurrent.*;
  */
 public class SpiderNode extends Node {
 
-    private long movementSpeed = 3000;
+    private long movementSpeed = 2500;
     private Random rand = new Random();
     private Object lock = null;
     private Node[][] maze = null;
@@ -42,6 +42,9 @@ public class SpiderNode extends Node {
         this.player = player;
         this.id = id;
         this.health=health;
+
+        // add a random offset to spiders speed
+        movementSpeed += rand.nextInt(501);
 
         // start moving the spider
         executor.submit(() -> {

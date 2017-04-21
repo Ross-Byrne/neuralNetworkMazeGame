@@ -56,12 +56,11 @@ public class PlayerNode extends Node {
         healthClassifier = new FuzzyHealthClassifier();
         enemyStatusClassifier = new FuzzyEnemyStatusClassifier();
         depthLimitedDFSTraverser = new PlayerDepthLimitedDFSTraverser();
-        Traversator aStar = new AStarTraversator(maze[3][3]);
+        //Traversator aStar = new AStarTraversator(maze[3][3]);
 
+       // aStar.traverse(maze,this);
 
-        aStar.traverse(maze,this);
-
-        System.out.println(aStar.getNextNode() +" current node: "+this);
+       // System.out.println(aStar.getNextNode() +" current node: "+this);
 
         // start player thread
         executor.submit(() -> {
@@ -234,6 +233,12 @@ public class PlayerNode extends Node {
     private void attack(SpiderNode spider){
         System.out.println("===============================================");
         System.out.println("Attacking!");
+
+        // wait for a little bit
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
 
         // get spider health
         int spiderHealth = spider.getHealth();
@@ -474,7 +479,7 @@ public class PlayerNode extends Node {
 
                 // move player to selected adjacent node
                 swapNodes(this, canMoveTo.get(index));
-                
+
             } else if(canMoveTo.size() < 1 && lastNode != null){ // if moved into a corner, go back to last node
 
                 System.out.println("No Moves");
