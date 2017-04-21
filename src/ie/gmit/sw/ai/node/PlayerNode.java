@@ -26,6 +26,7 @@ public class PlayerNode extends Node {
     private int swordDamage = 10;
     private Node[][] maze = null;
     private Node nextMove = null;
+    private Node lastNode;
     private boolean hasNextMove = false;
     private boolean inCombat=false;
     private long movementSpeed = 1000;
@@ -35,7 +36,8 @@ public class PlayerNode extends Node {
     private FuzzyHealthClassifier healthClassifier = null;
     private FuzzyEnemyStatusClassifier enemyStatusClassifier = null;
     private Random rand = new Random();
-    private Node lastNode;
+    private boolean hasTarget = false;
+
 
     public PlayerNode(int row, int col, Node[][] maze, Object lock) {
 
@@ -55,14 +57,11 @@ public class PlayerNode extends Node {
         enemyStatusClassifier = new FuzzyEnemyStatusClassifier();
         depthLimitedDFSTraverser = new PlayerDepthLimitedDFSTraverser();
         //Traversator aStar = new AStarTraversator(maze[3][3]);
-
        // aStar.traverse(maze,this);
-
        // System.out.println(aStar.getNextNode() +" current node: "+this);
 
         // start player thread
         executor.submit(() -> {
-
 
             while (true) {
                 try {
@@ -71,7 +70,7 @@ public class PlayerNode extends Node {
 
                         // do nothing, game is over
 
-                    } else if(getHealth() <= 0){
+                    } else if(getHealth() <= 0){ // check if the player is dead
 
                         System.out.println("\n===============================================");
                         System.out.println("Player is Dead. Game Over!");
@@ -85,19 +84,40 @@ public class PlayerNode extends Node {
                         // sleep thread to simulate a movement pace
                         Thread.sleep(movementSpeed);
 
-                    // don't do anything if in combat
+                        // don't do anything if in combat
                         if(!inCombat) {
 
                             // check for enemies right next to the player
                             checkForEnemies();
 
+                            // check for picks right next to player
                             checkForPickup();
+
+                            // only go for target if one does not exist
+                            if(hasTarget == false) {
+
+                                // scan for pickups and enemies farther way
+                                checkForPicksAndEnemies();
+                            }
+                            else
+                            {
+                                // move in on target
+                                moveInOnTarget();
+
+                            }
 
                             // place move code here
                             if(GameRunner.AI_CONTROLLED){ // only move if AI controlled
 
-                                // move randomly
-                                randomMove();
+                                // scan for pickups and enemies farther way
+                                //checkForPicksAndEnemies();
+
+                                // start moving the player
+                                if (hasNextMove) {          // if player has next move
+                                    moveToNextNode();     // move to next node
+                                } else {                    // otherwise
+                                    randomMove();           // move randomly
+                                }
                             } // if
 
                         } // if
@@ -444,6 +464,124 @@ public class PlayerNode extends Node {
         } // if
 
     } // checkForEnemies()
+
+    // checks for pickups and enemies and then
+    // decides whether to attack or get pickups
+    private void checkForPicksAndEnemies(){
+
+        Node target = null;
+        Set<Node> enemyNodes;
+        Set<Node> pickupNodes;
+        int last = 100000;
+        int heuistic = 0;
+
+        // scan for pickups and enemies farther way
+        enemyNodes = depthLimitedDFSTraverser.traverseForEnemies(maze, this, 10);
+        pickupNodes = depthLimitedDFSTraverser.traverseForPickups(maze, this, 10);
+
+        if(getHealth() < 60 || getSwords() < 0 && getBombs() < 5 || getBombs() < 5){
+
+            // go get closest pickup
+            for (Node n : pickupNodes){
+
+                // get distance from node
+                heuistic = this.getHeuristic(n);
+
+                // save the closest node
+                if(heuistic < last) {
+
+                    last = heuistic;
+                    target = n;
+                } // if
+            } // for
+
+        } else {
+            // kill the closes spider
+            // go get closest pickup
+            for (Node n : enemyNodes){
+
+                // get distance from node
+                heuistic = this.getHeuristic(n);
+
+                // save the closest node
+                if(heuistic < last) {
+
+                    last = heuistic;
+                    target = n;
+                } // if
+            } // for
+
+        } // if
+
+        System.out.println("Target: " + target);
+
+        // if target is obtained, move to it
+        if(target != null){
+
+            hasTarget = true;
+
+        } // if
+
+    } // checkForPicksAndEnemies()
+
+    private void moveInOnTarget(){
+
+        if(hasTarget){
+
+            // use A* to get next move
+
+
+        }
+
+    }
+
+    private void moveToNextNode(){
+
+        if(nextMove != null){
+
+            synchronized (lock) {
+
+                for(Node n : adjacentNodes(maze)){
+
+                    // check if next move is an adjacent node
+                    if(nextMove.equals(n)&& n.getId() == -1){
+
+                        // save last node
+                        lastNode = nextMove;
+
+                        // swap nodes to move
+                        swapNodes(this, nextMove);
+
+                        // reset nextMove
+                        nextMove = null;
+                        hasNextMove = false;
+
+                        // return
+                        return;
+                    } // if
+                } // for
+
+                // if not returned, didn't have next move
+                // move randomly instead
+                randomMove();
+
+                // reset next move
+                nextMove = null;
+                hasNextMove = false;
+                return;
+            } // synchronized
+
+        } else { // if nextMove is null
+
+            // move randomly
+            randomMove();
+
+            // flag as not having next move
+            hasNextMove = false;
+
+        } // if
+
+    } // moveToNextNode()
 
     // Method for randomly moving the player
     // run in a thread
