@@ -25,6 +25,7 @@ public class SpiderNode extends Node {
     private Node nextMove = null;
     private boolean hasNextMove = false;
     private boolean inCombat=false;
+    private static boolean yellowHostile=false;
 
     //Variables for spider
     private int health;
@@ -177,7 +178,7 @@ public class SpiderNode extends Node {
 
     } // randomMove()
 
-    public void flee(Node enemy){
+    public void flee(Node player){
 
         Node[] adjacentNodes = adjacentNodes(maze);
         Node move = null;
@@ -185,8 +186,9 @@ public class SpiderNode extends Node {
 
         for (Node n : adjacentNodes) {
 
-            if(n.getHeuristic(enemy)>lowestHeurstic){
+            if(n.getHeuristic(player)>lowestHeurstic){
                 move=n;
+                lowestHeurstic=n.getHeuristic(player);
             }
 
         } // for
@@ -222,95 +224,155 @@ public class SpiderNode extends Node {
     } // swapNodes()
 
     private void search(int row, int col){
-        Traversator dlDFS = new DepthLimitedDFSTraversator(10,player);
-        Traversator bestFirst = new BestFirstTraversator(player);
+        Traversator dlDFS = new DepthLimitedDFSTraversator(10,player); //
+        Traversator bossDlDFS = new DepthLimitedDFSTraversator(30,player);//bigger search for boss spiders
+        Traversator bestFirst = new BestFirstTraversator(player); //best path to player
 
         switch(id){
 
             case 6:
-                //System.out.println("Black Spider");
+                //Black Spider
 
                 //transverse from sprites location using Depth Limited DFS
                 dlDFS.traverse(maze, maze[row][col]);
+
+                // get the next node to move to
+                nextMove = dlDFS.getNextNode();
+
+                //if found player use best first for find best path
+                if(nextMove != null){
+                    //use best first to find best path
+                    bestFirst.traverse(maze, maze[row][col]);
+                    nextMove = bestFirst.getNextNode();
+                }
                 break;
 
             case 7:
-                //System.out.println("Blue Spider");
+                //Blue Spider
 
-                //transverse from sprites location using bestFirstTraverser
-                //bestFirst.traverse(maze, maze[row][col]);
-                //System.out.println("Finished travversing");
+                // Go straight for player if he has a sword
+                if(player.getSwords()>0){
+                    //transverse from sprites location using bestFirstTraverser
+                    bestFirst.traverse(maze, maze[row][col]);
+                    nextMove = bestFirst.getNextNode();
+                }
+
                 break;
 
             case 8:
-                //System.out.println("Brown Spider");
+                //Brown Spider
 
-                //transverse from sprites location using Depth Limited DFS
-                dlDFS.traverse(maze, maze[row][col]);
+                //brown spiders flee from player
+                flee(player);
                 break;
 
             case 9:
-                //System.out.println("Green Spider");
+                //Green Spider
 
                 //transverse from sprites location using Depth Limited DFS
                 dlDFS.traverse(maze, maze[row][col]);
+
+                // get the next node to move to
+                nextMove = dlDFS.getNextNode();
+
+                //if found player use best first for find best path
+                if(nextMove != null){
+                    //use best first to find best path
+                    bestFirst.traverse(maze, maze[row][col]);
+                    nextMove = bestFirst.getNextNode();
+                }
+
                 break;
 
             case 10:
-                //System.out.println("Grey Spider");
+                //Grey Spider
 
-                //transverse from sprites location using Depth Limited DFS
-                dlDFS.traverse(maze, maze[row][col]);
+                //Grey spiders are passive never attack player
+                //random walk around maze
+
                 break;
 
             case 11:
-                //System.out.println("Orange Spider");
+                //Orange Spider
 
                 //transverse from sprites location using Depth Limited DFS
                 dlDFS.traverse(maze, maze[row][col]);
+                // get the next node to move to
+                nextMove = dlDFS.getNextNode();
+
+                //if found player use best first for find best path
+                if(nextMove != null){
+                    //use best first to find best path
+                    bestFirst.traverse(maze, maze[row][col]);
+                    nextMove = bestFirst.getNextNode();
+                }
+
                 break;
 
             case 12:
-                //System.out.println("Red Spider");
+                //Red Spider
 
-                //transverse from sprites location using Depth Limited DFS
-                //dlDFS.traverse(maze, maze[row][col]);
+                //replace with better algo and decide to attack with neural network
 
+                if(player.getBombs()>3){
+                    bossDlDFS.traverse(maze, maze[row][col]);
+                    // get the next node to move to
+                    nextMove = bossDlDFS.getNextNode();
 
-                //checks how many enemies //move to playerNode class
-                //PlayerDepthLimitedDFSTraverser enemy = new PlayerDepthLimitedDFSTraverser();
-                //enemy.traverseForEnemies(maze, maze[row][col], 10);
-                //System.out.println("Number of Enemies:  "+enemy.getEnemyCount());
+                    //if found player use best first for find best path
+                    if(nextMove != null){
+                        //use best first to find best path
+                        bestFirst.traverse(maze, maze[row][col]);
+                        nextMove = bestFirst.getNextNode();
+                    }
 
+                }
+                
                 break;
 
             case 13:
-                //System.out.println("Yellow Spider");
+                //Yellow Spider
 
-                //transverse from sprites location using Depth Limited DFS
-                dlDFS.traverse(maze, maze[row][col]);
+                if(SpiderNode.isYellowhostile()){
+                    //transverse from sprites location using Depth Limited DFS
+                    dlDFS.traverse(maze, maze[row][col]);
+
+                    // get the next node to move to
+                    nextMove = dlDFS.getNextNode();
+
+                    //if found player use best first for find best path
+                    if(nextMove != null){
+                        //use best first to find best path
+                        bestFirst.traverse(maze, maze[row][col]);
+                        nextMove = bestFirst.getNextNode();
+                    }
+                }
+                else
+                    flee(player);
+
                 break;
             default:
                 System.out.println("Not a Spider");
                 break;
 
-
         }
-
-        // get the next node to move to
-        nextMove = dlDFS.getNextNode();
 
         // flag as having a next move
         if(nextMove != null){
-            //use best first to find best path
-            bestFirst.traverse(maze, maze[row][col]);
-            nextMove = bestFirst.getNextNode();
             hasNextMove = true;
         } else {
             hasNextMove = false;
             //System.out.println("has no next Move");
         }
 
+    }
+
+    public static boolean isYellowhostile() {
+        return yellowHostile;
+    }
+
+    public static void setYellowhostile(boolean yellowHostile) {
+        SpiderNode.yellowHostile = yellowHostile;
     }
 
     public boolean isInCombat() {
