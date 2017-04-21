@@ -471,8 +471,8 @@ public class PlayerNode extends Node {
         int heuistic = 0;
 
         // scan for pickups and enemies farther way
-        enemyNodes = depthLimitedDFSTraverser.traverseForEnemies(maze, this, 30);
-        pickupNodes = depthLimitedDFSTraverser.traverseForPickups(maze, this, 30);
+        enemyNodes = depthLimitedDFSTraverser.traverseForEnemies(maze, this, 60);
+        pickupNodes = depthLimitedDFSTraverser.traverseForPickups(maze, this, 60);
 
         if(getHealth() < 60 || getSwords() < 0 && getBombs() < 5 || getBombs() < 5){
 

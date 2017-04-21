@@ -31,21 +31,19 @@ public class Maze {
         // place the player in maze
 		addFeature(5, -1, 1);
 
-		int featureNumber = 20;
-		addFeature(1, 0, featureNumber); //1 is a sword, 0 is a hedge
-		addFeature(2, 0, featureNumber); //2 is help, 0 is a hedge
-		addFeature(3, 0, featureNumber); //3 is a bomb, 0 is a hedge
-		addFeature(4, 0, featureNumber); //4 is a hydrogen bomb, 0 is a hedge
-		
-		featureNumber = 30;
-		addFeature(6, -1, 20); //6 is a Black Spider, 0 is a hedge
-		addFeature(7, -1, 5); //7 is a Blue Spider, 0 is a hedge
-		addFeature(8, -1, 20); //8 is a Brown Spider, 0 is a hedge
-		addFeature(9, -1, 20); //9 is a Green Spider, 0 is a hedge
-		addFeature(10, -1, 20); //: is a Grey Spider, 0 is a hedge
-		addFeature(11, -1, 20); //; is a Orange Spider, 0 is a hedge
+		addFeature(1, 0, 20); //1 is a sword, 0 is a hedge
+		addFeature(2, 0, 30); //2 is help, 0 is a hedge
+		addFeature(3, 0, 40); //3 is a bomb, 0 is a hedge
+		addFeature(4, 0, 30); //4 is a hydrogen bomb, 0 is a hedge
+
+		addFeature(6, -1, 30); //6 is a Black Spider, 0 is a hedge
+		addFeature(7, -1, 8); //7 is a Blue Spider, 0 is a hedge
+		addFeature(8, -1, 30); //8 is a Brown Spider, 0 is a hedge
+		addFeature(9, -1, 30); //9 is a Green Spider, 0 is a hedge
+		addFeature(10, -1, 30); //: is a Grey Spider, 0 is a hedge
+		addFeature(11, -1, 25); //; is a Orange Spider, 0 is a hedge
 		addFeature(12, -1, 1); //< is a Red Spider, 0 is a hedge
-		addFeature(13, -1, 20); //= is a Yellow Spider, 0 is a hedge
+		addFeature(13, -1, 30); //= is a Yellow Spider, 0 is a hedge
 	}
 	
 	private void init(){
