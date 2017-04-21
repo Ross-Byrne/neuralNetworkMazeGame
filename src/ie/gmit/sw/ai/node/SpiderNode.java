@@ -15,7 +15,7 @@ import java.util.concurrent.*;
  * The red spider is the Boss. There is only one boss. (There can only be one!)
  *
  * The spiders use a depth limited depth first search to scan for the player.
- * IF the spider finds the player, they will start moving towards the player.
+ * IF the spider finds the player, they will start moving towards the player Using depth limited DFS.
  * IF they don't find the player they will wander randomly.
  *
  * The blue and Red spiders use a best first search to find the player, the others use DLDFS.
