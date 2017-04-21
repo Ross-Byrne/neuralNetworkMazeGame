@@ -1,6 +1,5 @@
 
-Artificial Intelligence
-=====================================================================================================
+# Artificial Intelligence
 Controlling Game Characters with Neural Networks and Fuzzy Logic
 
 Ross Byrne
@@ -9,16 +8,14 @@ Martin Coleman
 Github:
 https://github.com/Ross-Byrne/neuralNetworkMazeGame
 
-=====================================================================================================
-ABOUT THE GAME
-=====================================================================================================
+
+# ABOUT THE GAME
 The Aim of the game is to traverse around the maze fighting spiders and collecting pickups to 
 become strong enough to beat the boss spider. Spiders will either flee or fight the player.
 
 The game can be player or AI controlled, Popup at start to decide if AI or Player controlled.
 
-The spiders are as follows:
-=====================================================================================================
+## The spiders are as follows:
 Red - Boss, Strongest, Only one in maze, Attacks player when he has bombs and swords.
 
 Blue - Next strongest, Only a few in maze, Attack player when he has a sword.
@@ -34,11 +31,9 @@ Yellow - Flees from player, won’t attack player until he attacks a yellow spid
 Brown - Newer attack player, flees from player.
 
 Green - Heal the player
-=====================================================================================================
 
 
-The Pickups are as follows:
-=====================================================================================================
+## The Pickups are as follows:
 Sword - gives the player a sword to increase attack
 
 Random Pickup(help box) - Give the player either health, a sword or a bomb
@@ -46,12 +41,9 @@ Random Pickup(help box) - Give the player either health, a sword or a bomb
 Bomb - gives the player a bomb
 
 Hydrogen Bomb - Gives the player two bombs
-=====================================================================================================
 
 
-=====================================================================================================
-FUZZY LOGIC
-=====================================================================================================
+# FUZZY LOGIC
 Fuzzy Logic is used to make decisions for the player.
 
 The players health status is decided by a fuzzy logic classifier that will return injury status e.g. Minor
@@ -60,9 +52,7 @@ The players risk associated with attacking is decided by Fuzzy logic, player can
 
 
 
-=====================================================================================================
-NEURAL NETWORK
-=====================================================================================================
+# NEURAL NETWORK
 
  A Neural Network to decide what happens when a player
  engages in combat with a spider.
@@ -75,9 +65,7 @@ NEURAL NETWORK
  The result is either Attack, panic, heal or run.
  The logic for this functionality is in PlayerNode.java.
 
-=====================================================================================================
-AI SEARCH ALGORITHMS
-=====================================================================================================
+# AI SEARCH ALGORITHMS
 Spider nodes implement their own traverses to locate the player and to move either toward of away from the player.
 
 Player node uses a variety of traverses to navigate around the maze, find pickups and locate spiders in the maze.
@@ -95,16 +83,13 @@ AStar is used by the player to find the best path to a given Node.
 The Node might be a pickup or a spider to attack depending to the players health and attack.
 
 
-=====================================================================================================
-THREADED CHARACTERS
-=====================================================================================================
+
+# THREADED CHARACTERS
+
 All spiders are threaded and player node is also threaded. 
 Searches are preformed in threads by each node individually.
 
-
-=====================================================================================================
-EXTRAS
-=====================================================================================================
+# EXTRAS
 Redesign of Maze:
 We redesigned the maze.
 It uses ints to decide sprites etc.
@@ -120,7 +105,6 @@ The player is fully automated, using A* to walking around the maze.
 
 Adapted the Depth limited depth first search to find all enemies and pickups up to a set depth.
 
-=====================================================================================================
 
 
 
