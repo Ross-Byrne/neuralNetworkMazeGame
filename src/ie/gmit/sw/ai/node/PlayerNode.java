@@ -3,7 +3,6 @@ package ie.gmit.sw.ai.node;
 import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.fuzzyLogic.FuzzyEnemyStatusClassifier;
 import ie.gmit.sw.ai.fuzzyLogic.FuzzyHealthClassifier;
-import ie.gmit.sw.ai.gui.*;
 import ie.gmit.sw.ai.neuralNetwork.CombatDecisionNN;
 import ie.gmit.sw.ai.traversers.PlayerDepthLimitedDFSTraverser;
 
@@ -83,19 +82,18 @@ public class PlayerNode extends Node {
                             // check for enemies right next to the player
                             checkForEnemies();
 
+                            checkForPickup();
+
+                            // place move code here
+
                         } // if
-
-                        // place move code here
-
                     } // if
 
                 } catch (Exception ex) {
 
                 } // try catch
             } // while
-
         });
-
     }
 
     public void startCombat(SpiderNode spider){
@@ -260,6 +258,11 @@ public class PlayerNode extends Node {
             // not in combat
             inCombat = false;
 
+            //if attack a yellow spider all yellow turn hostile
+            if(spider.getId()==13){
+                SpiderNode.setYellowhostile(true);
+            }
+
             // remove spider
             maze[spider.getRow()][spider.getCol()] = new Node(spider.getRow(), spider.getCol(), -1);
         } else {
@@ -270,6 +273,11 @@ public class PlayerNode extends Node {
             decreaseHealth(spiderHealth);
 
             // spider dies
+
+            //if attack a yellow spider all yellow turn hostile
+            if(spider.getId()==13){
+                SpiderNode.setYellowhostile(true);
+            }
 
             // not in combat
             inCombat = false;
@@ -442,6 +450,60 @@ public class PlayerNode extends Node {
 
     } // flee()
 
+    public void checkForPickup(){
+        Node[] adjacentNodes = adjacentNodes(maze);
+
+        for (Node n : adjacentNodes) {
+            if(n.getId()==1){
+                //sword - increase swords by one
+                increaseSwords();
+                //replaces pickup with hedge
+                n.setId(0);
+                System.out.println("Picked up a sword");
+                System.out.println("Sword count "+getSwords());
+            }
+            if(n.getId()==2){
+                //random Pickup
+                int  randNum = rand.nextInt(3) + 1;
+
+                switch (randNum){
+                    case 1:
+                        increaseHealth(20);
+                        System.out.println("Random Pickup was +20 Health");
+                        break;
+                    case 2:
+                        increaseSwords();
+                        System.out.println("Random Pickup was a sword");
+                        break;
+                    case 3:
+                        increaseBombs();
+                        System.out.println("Random Pickup was a bomb");
+                        break;
+                }
+                //replaces pickup with hedge
+                n.setId(0);
+
+            }
+            if(n.getId()==3){
+                //regular bomb - increase bombs by 1
+                increaseBombs();
+                //replaces pickup with hedge
+                n.setId(0);
+                System.out.println("Picked up a bomb");
+            }
+            if(n.getId()==4){
+                // hydrogen bomb - gives 2 bombs
+                increaseBombs();
+                increaseBombs();
+                //replaces pickup with hedge
+                n.setId(0);
+                System.out.println("Picked up a Hydrogen Bomb");
+            }
+
+        } // for
+
+    } // flee()
+
     private void swapNodes(Node x, Node y){
 
         int newX, newY, oldX, oldY;
@@ -487,7 +549,7 @@ public class PlayerNode extends Node {
     }
 
     public void increaseBombs() {
-        this.bombs += bombs;
+        this.bombs++;
     }
 
     public void decreaseBombs() {
@@ -502,11 +564,11 @@ public class PlayerNode extends Node {
         return swords;
     }
 
-    public void increaseSwords(int swords) {
-        this.swords += swords;
+    public void increaseSwords() {
+        this.swords++;
     }
 
-    public void decreaseSwords(int swords) {
+    public void decreaseSwords() {
         this.swords -= swords;
     }
 
