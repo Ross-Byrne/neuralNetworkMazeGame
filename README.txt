@@ -62,9 +62,17 @@ The players risk associated with attacking is decided by Fuzzy logic, player can
 =====================================================================================================
 NEURAL NETWORK
 =====================================================================================================
-Neural network is used to decide in combat that the player node should do.
-Pass into NN If player has sword, bombs, health and no of enemies.
-NN returns its recommended action.
+
+ A Neural Network to decide what happens when a player
+ engages in combat with a spider.
+ The Neural net is trained in the constructor when the object is created.
+ The network takes 4 inputs.
+ Health, which is classified by a Fuzzy logic system,
+ Sword, which is whether or not the player has one,
+ Bomb, which is whether or not the player has any
+ Enemies, which is classified using a Fuzzy logic system.
+ The result is either Attack, panic, heal or run.
+ The logic for this functionality is in PlayerNode.java.
 
 =====================================================================================================
 AI SEARCH ALGORITHMS
@@ -106,6 +114,10 @@ Player decides to Attack,Heal,Panic or attempt to run away.
 
 Redesign AStar:
 We had to redesign the AStar traverser for it to be compatible with our maze.
+
+The player is fully automated, using A* to walking around the maze.
+
+Adapted the Depth limited depth first search to find all enemies and pickups up to a set depth.
 
 =====================================================================================================
 
