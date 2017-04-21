@@ -1,7 +1,9 @@
 package ie.gmit.sw.ai.node;
 
+import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.fuzzyLogic.FuzzyEnemyStatusClassifier;
 import ie.gmit.sw.ai.fuzzyLogic.FuzzyHealthClassifier;
+import ie.gmit.sw.ai.gui.*;
 import ie.gmit.sw.ai.neuralNetwork.CombatDecisionNN;
 import ie.gmit.sw.ai.traversers.PlayerDepthLimitedDFSTraverser;
 
@@ -27,12 +29,12 @@ public class PlayerNode extends Node {
     private boolean inCombat=false;
     private long movementSpeed = 3000;
     private ExecutorService executor = Executors.newFixedThreadPool(1);
-    private PlayerDepthLimitedDFSTraverser depthLimitedDFSTraverser;
+    private PlayerDepthLimitedDFSTraverser depthLimitedDFSTraverser = null;
     private CombatDecisionNN combatNet = null;
     private FuzzyHealthClassifier healthClassifier = null;
     private FuzzyEnemyStatusClassifier enemyStatusClassifier = null;
     private Random rand = new Random();
-    public boolean isDead = false;
+    private boolean isDead = false;
 
     public PlayerNode(int row, int col, Node[][] maze) {
 
@@ -57,24 +59,33 @@ public class PlayerNode extends Node {
             while (true) {
                 try {
 
-                    // check that player is dead
-                    if(getHealth() <= 0){
-                        // player is dead
-                        isDead = true;
+                    if(GameRunner.isGameOver()){
+
+                        // do nothing, game is over
+
+                    } else if(getHealth() <= 0){
 
                         System.out.println("\n===============================================");
-                        System.out.println("Player is Dead!");
+                        System.out.println("Player is Dead. Game Over!");
                         System.out.println("===============================================\n");
-                    } // if
 
-                    // sleep thread to simulate a movement pace
-                    Thread.sleep(movementSpeed);
+                        // player is dead, game is over
+                        GameRunner.gameOver(true);
 
-                    // don't do anything if in combat
-                    if(!inCombat) {
+                    } else {
 
-                        // check for enemies right next to the player
-                        checkForEnemies();
+                        // sleep thread to simulate a movement pace
+                        Thread.sleep(movementSpeed);
+
+                        // don't do anything if in combat
+                        if (!inCombat) {
+
+                            // check for enemies right next to the player
+                            checkForEnemies();
+
+                        } // if
+
+                        // place move code here
 
                     } // if
 
@@ -217,7 +228,7 @@ public class PlayerNode extends Node {
         System.out.println("Player Damage: " + getDamage());
 
         //green spider - Heal player
-        if(spider.getId()==9){
+        if(spider.getId() == 9){
             increaseHealth(20);
         }
 
@@ -271,6 +282,18 @@ public class PlayerNode extends Node {
         System.out.println("Player's Health: " + getHealth());
         System.out.println("===============================================\n");
 
+        // check if spider was boss
+        if(getHealth() > 0 && spider.getId() == 12){ // still alive and is boss
+
+            System.out.println("\n===============================================");
+            System.out.println("Boss is Dead. Game Over!");
+            System.out.println("===============================================\n");
+
+            // boss is dead, game is over
+            GameRunner.gameOver(false);
+
+        } // if
+
     } // attack()
 
     private void panic(SpiderNode spider){
@@ -288,11 +311,9 @@ public class PlayerNode extends Node {
 
             // check that player is dead
             if(getHealth() <= 0){
-                // player is dead
-                isDead = true;
-                System.out.println("\n===============================================");
-                System.out.println("Player is Dead!");
-                System.out.println("===============================================\n");
+                // player is dead, game over
+                GameRunner.GAME_OVER = true;
+
             } // if
         } // if
 

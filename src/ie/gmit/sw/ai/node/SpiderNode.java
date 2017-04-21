@@ -1,5 +1,6 @@
 package ie.gmit.sw.ai.node;
 
+import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.traversers.BestFirstTraversator;
 import ie.gmit.sw.ai.traversers.DepthLimitedDFSTraversator;
 import ie.gmit.sw.ai.traversers.PlayerDepthLimitedDFSTraverser;
@@ -45,30 +46,39 @@ public class SpiderNode extends Node {
         executor.submit(() -> {
 
             while (true) {
-                try {
 
-                    // sleep thread to simulate a movement pace
-                    Thread.sleep(movementSpeed);
+                // check if the game is over
+                if(GameRunner.isGameOver()){
 
-                    // don't do anything
-                    if(!inCombat) {
+                    // game is over, do nothing
+                }
+                else // game not over, continue as usual
+                {
+                    try {
 
-                        //search
-                        search(getRow(), getCol());
+                        // sleep thread to simulate a movement pace
+                        Thread.sleep(movementSpeed);
 
-                        // start moving the spider
-                        if (hasNextMove) {        // if spider has next move
-                            moveToNextNode();   // move to next node
-                        } else {                // otherwise
-                            randomMove();       // move randomly
-                        }
-                    } // if
+                        // don't do anything
+                        if (!inCombat) {
 
-                } catch (Exception ex) {
+                            //search
+                            search(getRow(), getCol());
 
-                } // try catch
+                            // start moving the spider
+                            if (hasNextMove) {        // if spider has next move
+                                moveToNextNode();   // move to next node
+                            } else {                // otherwise
+                                randomMove();       // move randomly
+                            }
+                        } // if
+
+                    } catch (Exception ex) {
+
+                    } // try catch
+
+                } // if
             } // while
-
         });
 
     } // constructor

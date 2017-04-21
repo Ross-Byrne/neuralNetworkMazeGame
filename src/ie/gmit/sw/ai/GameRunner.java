@@ -1,6 +1,7 @@
 package ie.gmit.sw.ai;
 
 
+import ie.gmit.sw.ai.gui.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -8,10 +9,14 @@ import javax.swing.*;
 public class GameRunner implements KeyListener{
 	private static final int MAZE_DIMENSION = 100;
 	private static final int IMAGE_COUNT = 14;
+	public static boolean AI_CONTROLLED;
+	public static boolean GAME_OVER = false;
 	private GameView view;
 	private Maze model;
+    private static JFrame f;
 	
 	public GameRunner() throws Exception{
+
 		model = new Maze(MAZE_DIMENSION);
     	view = new GameView(model);
 
@@ -23,7 +28,7 @@ public class GameRunner implements KeyListener{
     	view.setMinimumSize(d);
     	view.setMaximumSize(d);
     	
-    	JFrame f = new JFrame("GMIT - B.Sc. in Computing (Software Development)");
+        f = new JFrame("GMIT - B.Sc. in Computing (Software Development)");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.addKeyListener(this);
         f.getContentPane().setLayout(new FlowLayout());
@@ -32,7 +37,15 @@ public class GameRunner implements KeyListener{
         f.setLocation(100,100);
         f.pack();
         f.setVisible(true);
+
 	}
+
+	// closes the game window
+	private static void closeGame(){
+
+        // close the game
+        f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+    }
 
 	private void updateView(){
 
@@ -70,19 +83,26 @@ public class GameRunner implements KeyListener{
 
     
 	private boolean tryMove(int row, int col){
-		if (row <= model.size() - 1 && col <= model.size() - 1 && model.get(row, col).getId() == -1){
 
-			// move node player is going to move to, to the players place
-			model.set(getCurrentRow(), getCurrentCol(), model.get(row, col));
+        // can only control the player if game is not AI controlled
+        if(!GameRunner.AI_CONTROLLED) {
 
-			// move the player to the next position
-			model.set(row, col, model.getPlayer());
+            if (row <= model.size() - 1 && col <= model.size() - 1 && model.get(row, col).getId() == -1) {
 
-			return true;
-		}else{
-			return false; //Can't move
-		}
-	}
+                // move node player is going to move to, to the players place
+                model.set(getCurrentRow(), getCurrentCol(), model.get(row, col));
+
+                // move the player to the next position
+                model.set(row, col, model.getPlayer());
+
+                return true;
+            } else {
+                return false; //Can't move
+            }
+        } // if
+
+        return false;
+	} // tryMove()
 	
 	private Sprite[] getSprites() throws Exception{
 		//Read in the images from the resources directory as sprites. Note that each
@@ -107,6 +127,42 @@ public class GameRunner implements KeyListener{
 	}
 	
 	public static void main(String[] args) throws Exception{
+
+		// get selected option (0 = AI, 1 = Player)
+		int result = StartGameJOptionPane.display();
+
+		// set boolean
+        if(result == 0)
+            AI_CONTROLLED = true;
+        else
+            AI_CONTROLLED = false;
+
+        // start the game
 		new GameRunner();
 	}
-}
+
+    public static boolean isGameOver() {
+        return GAME_OVER;
+    }
+
+    // sets the game to be over, either you won or lost
+    // pass in true if player dead, false if boss died
+    public static void gameOver(boolean playerDead) {
+        GAME_OVER = true;
+
+        if(playerDead){ // game over, player is dead
+
+            // show player dead message
+            GameOverJOptionPane.display("Player Died! Game Over!");
+
+        } else { // game over, boss is dead
+
+            // won game, show message
+            GameOverJOptionPane.display("Boss Defeated! Game Over!");
+        } // if
+
+        // end game
+        closeGame();
+
+    } // setGameOver()
+} // class
