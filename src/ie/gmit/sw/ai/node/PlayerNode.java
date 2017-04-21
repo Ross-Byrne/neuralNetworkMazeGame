@@ -1,20 +1,18 @@
 package ie.gmit.sw.ai.node;
 
-import ie.gmit.sw.ai.GameRunner;
+import ie.gmit.sw.ai.*;
 import ie.gmit.sw.ai.fuzzyLogic.FuzzyEnemyStatusClassifier;
 import ie.gmit.sw.ai.fuzzyLogic.FuzzyHealthClassifier;
 import ie.gmit.sw.ai.neuralNetwork.CombatDecisionNN;
-import ie.gmit.sw.ai.traversers.AStarTraversator;
-import ie.gmit.sw.ai.traversers.PlayerDepthLimitedDFSTraverser;
-import ie.gmit.sw.ai.traversers.Traversator;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import ie.gmit.sw.ai.traversers.*;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
  * Created by Martin Coleman on 19/04/2017.
+ *
+ * The Node that represents the player.
+ * Contains all of the player logic.
  */
 public class PlayerNode extends Node {
 

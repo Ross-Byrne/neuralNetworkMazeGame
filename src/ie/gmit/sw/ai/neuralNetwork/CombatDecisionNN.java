@@ -13,7 +13,7 @@ public class CombatDecisionNN {
 
         nn = new NeuralNetwork(Activator.ActivationFunction.Sigmoid, 4, 3, 4);
         Trainator trainer = new BackpropagationTrainer(nn);
-        trainer.train(data, expected, 0.2, 3000000);
+        trainer.train(data, expected, 0.2, 1000000);
     }
 
     /*

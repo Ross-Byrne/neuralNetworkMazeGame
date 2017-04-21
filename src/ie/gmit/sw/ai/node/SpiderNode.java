@@ -3,15 +3,14 @@ package ie.gmit.sw.ai.node;
 import ie.gmit.sw.ai.GameRunner;
 import ie.gmit.sw.ai.traversers.BestFirstTraversator;
 import ie.gmit.sw.ai.traversers.DepthLimitedDFSTraversator;
-import ie.gmit.sw.ai.traversers.PlayerDepthLimitedDFSTraverser;
 import ie.gmit.sw.ai.traversers.Traversator;
-
 import java.util.*;
 import java.util.concurrent.*;
 
 /**
  * Created by Ross Byrne on 17/04/17.
- * An extension of Node class, to represent the spiders
+ * An extension of Node class, to represent the spiders.
+ * Contains all of the spider logic.
  */
 public class SpiderNode extends Node {
 

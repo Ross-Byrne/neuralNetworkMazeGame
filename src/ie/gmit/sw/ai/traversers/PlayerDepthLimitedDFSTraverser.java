@@ -11,7 +11,9 @@ import java.util.Set;
     Adapted from AI-MAZE_ALGOS project from moodle
  */
 
+// Handles the scan searching that the player needs
 public class PlayerDepthLimitedDFSTraverser {
+
     private Node[][] maze;
     private int limit;
     private boolean keepRunning = true;
@@ -48,8 +50,6 @@ public class PlayerDepthLimitedDFSTraverser {
 
         // clear visited nodes
         isVisited = null;
-
-        System.out.println("Visited Nodes: " + visitCount);
 
         return enemies;
     }
