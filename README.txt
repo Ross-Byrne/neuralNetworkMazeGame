@@ -5,6 +5,9 @@ Controlling Game Characters with Neural Networks and Fuzzy Logic
 Ross Byrne
 Martin Coleman 
 
+Github:
+https://github.com/Ross-Byrne/neuralNetworkMazeGame
+
 =====================================================================================================
 ABOUT THE GAME
 =====================================================================================================
@@ -94,7 +97,8 @@ Searches are preformed in threads by each node individually.
 EXTRAS
 =====================================================================================================
 Redesign of Maze:
-We redesigned the maze uses ints to decide sprites and 
+We redesigned the maze.
+It uses ints to decide sprites etc.
 
 Combat system:
 Player node uses fuzzy logic to help decide to engage spiders or look for pickups to get stronger or to heal.
