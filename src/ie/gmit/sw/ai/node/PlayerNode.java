@@ -16,7 +16,7 @@ import java.util.concurrent.*;
  *
  * Uses the Combat Neural network which uses the two fuzzy logic classifiers
  * FuzzyEnemyStatusClassifier and FuzzyHealthClassifier to get a result from the
- * Neural network to decide what happens when cobat starts.
+ * Neural network to decide what happens when combat starts.
  * IF the player is going to attack, it uses a bomb if it has one,
  * or up to 3 bombs for the boss.
  * Having a sword increases the players damage by +10.
